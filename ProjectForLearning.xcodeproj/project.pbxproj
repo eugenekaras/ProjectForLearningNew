@@ -10,19 +10,24 @@
 		E93C721B2978689F0040AAEC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E93C721A2978689F0040AAEC /* GoogleService-Info.plist */; };
 		E93EBC002978AB83007940BA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = E93EBBFF2978AB83007940BA /* FirebaseAnalytics */; };
 		E93EBC022978AB83007940BA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = E93EBC012978AB83007940BA /* FirebaseCrashlytics */; };
+		E93EBC042979C8AB007940BA /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93EBC032979C8AB007940BA /* SplashScreenView.swift */; };
 		E980590C29780D6D006379E8 /* ProjectForLearningApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E980590B29780D6D006379E8 /* ProjectForLearningApp.swift */; };
 		E980590E29780D6D006379E8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E980590D29780D6D006379E8 /* ContentView.swift */; };
 		E980591029780D6F006379E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E980590F29780D6F006379E8 /* Assets.xcassets */; };
 		E980591329780D6F006379E8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E980591229780D6F006379E8 /* Preview Assets.xcassets */; };
+		E9A6774A297A028D009CF826 /* SignInWithApple.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A67749297A028D009CF826 /* SignInWithApple.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E93C721A2978689F0040AAEC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E93EBC032979C8AB007940BA /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		E980590829780D6D006379E8 /* ProjectForLearning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectForLearning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E980590B29780D6D006379E8 /* ProjectForLearningApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectForLearningApp.swift; sourceTree = "<group>"; };
 		E980590D29780D6D006379E8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E980590F29780D6F006379E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E980591229780D6F006379E8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E9A677472979E6A8009CF826 /* ProjectForLearning.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ProjectForLearning.entitlements; sourceTree = "<group>"; };
+		E9A67749297A028D009CF826 /* SignInWithApple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithApple.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +62,9 @@
 		E980590A29780D6D006379E8 /* ProjectForLearning */ = {
 			isa = PBXGroup;
 			children = (
+				E9A677472979E6A8009CF826 /* ProjectForLearning.entitlements */,
 				E980590B29780D6D006379E8 /* ProjectForLearningApp.swift */,
-				E980590D29780D6D006379E8 /* ContentView.swift */,
+				E9A67748297A01F6009CF826 /* Views */,
 				E93C721A2978689F0040AAEC /* GoogleService-Info.plist */,
 				E980590F29780D6F006379E8 /* Assets.xcassets */,
 				E980591129780D6F006379E8 /* Preview Content */,
@@ -72,6 +78,16 @@
 				E980591229780D6F006379E8 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E9A67748297A01F6009CF826 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E980590D29780D6D006379E8 /* ContentView.swift */,
+				E93EBC032979C8AB007940BA /* SplashScreenView.swift */,
+				E9A67749297A028D009CF826 /* SignInWithApple.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -178,6 +194,8 @@
 			files = (
 				E980590E29780D6D006379E8 /* ContentView.swift in Sources */,
 				E980590C29780D6D006379E8 /* ProjectForLearningApp.swift in Sources */,
+				E9A6774A297A028D009CF826 /* SignInWithApple.swift in Sources */,
+				E93EBC042979C8AB007940BA /* SplashScreenView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +323,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ProjectForLearning/ProjectForLearning.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -336,6 +355,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ProjectForLearning/ProjectForLearning.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ProjectForLearning/Preview Content\"";
