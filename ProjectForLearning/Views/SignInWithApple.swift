@@ -21,7 +21,6 @@ struct SignInWithApple: View {
                 if !isSignedIn {
                     SignInButtonView()
                 } else {
-                    // Signed In
                     Text("Welcome back!")
                 }
                 
@@ -35,9 +34,6 @@ struct SignInWithApple: View {
 struct SignInButtonView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @AppStorage("email") var email: String = ""
-    @AppStorage("firstName") var firstName: String = ""
-    @AppStorage("lastName") var lastName: String = ""
     @AppStorage("userId") var userId: String = ""
     
     var body: some View {
@@ -51,16 +47,8 @@ struct SignInButtonView: View {
                 case let credential as ASAuthorizationAppleIDCredential:
                     
                     let userId = credential.user
-                    let email = credential.email
-                    let firstName = credential.fullName?.givenName
-                    let lastName = credential.fullName?.familyName
-                    
-                    
-                    self.email = email ?? ""
                     self.userId = userId
-                    self.firstName = firstName ?? ""
-                    self.lastName = lastName ?? ""
-                    
+
                 default:
                     break
                 }

@@ -11,20 +11,17 @@ struct ContentView: View {
     
     @State var isError = false
     
-    
     var body: some View {
-       
-        
-        
+
         VStack {
-            Button("Crash") {
-                fatalError("Crash was triggered")
-            }
+//            Button("Crash") {
+//                fatalError("Crash was triggered")
+//            }
+            TabPanelView(tabItems: tabViewModelArr)
         }
-        
-        
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
