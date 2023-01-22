@@ -1,13 +1,13 @@
 //
-//  SplashScreenView.swift
+//  GeetingPageView.swift
 //  ProjectForLearning
 //
-//  Created by Евгений Карась on 19.01.23.
+//  Created by Евгений Карась on 22.01.23.
 //
 
 import SwiftUI
 
-struct SplashScreenView: View {
+struct GeetingPageView: View {
     
     @State private var isActive = false
     @State private var size = 0.8
@@ -18,18 +18,20 @@ struct SplashScreenView: View {
     var body: some View {
         if isActive {
 
-            switch viewModel.GetSignInState() {
+            switch viewModel.state  {
             case .signedIn: ContentView()
             case .signedOut: SignInWithGoogle()
             }
             
         } else {
+         
             VStack{
                 VStack{
-                    Image(systemName: "swift")
+                    Image(systemName: "function")
                         .font(.system(size: 80))
                         .foregroundColor(.purple)
-                    Text("Study App")
+                        .padding(20)
+                    Text("Welcome")
                         .font(.system(size: 23))
                         .foregroundColor(.black.opacity(0.80))
                 }
@@ -50,13 +52,14 @@ struct SplashScreenView: View {
                     
                 }
             }
+        
         }
         
     }
 }
 
-struct SplashScreenView_Previews: PreviewProvider {
+struct GeetingPageView_Previews: PreviewProvider {
     static var previews: some View {
-        SplashScreenView()
+        GeetingPageView()
     }
 }

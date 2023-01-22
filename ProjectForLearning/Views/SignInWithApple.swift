@@ -8,7 +8,7 @@ import AuthenticationServices
 import SwiftUI
 
 struct SignInWithApple: View {
-
+    
     @AppStorage("userId") var userId: String = ""
     
     private var isSignedIn: Bool {
@@ -24,7 +24,7 @@ struct SignInWithApple: View {
                     Text("Welcome back!")
                 }
                 
-
+                
             }
             .navigationTitle("Sign In")
         }
@@ -48,7 +48,7 @@ struct SignInButtonView: View {
                     
                     let userId = credential.user
                     self.userId = userId
-
+                    
                 default:
                     break
                 }

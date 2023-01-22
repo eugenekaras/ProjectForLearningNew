@@ -24,20 +24,15 @@ struct LoginScreen: View {
                 Spacer()
                 
                 GoogleSignInButton{
-                         viewModel.signIn()
-                       }
+                
+                    viewModel.signIn()
+                        
+                }.padding(20)
  
                 Spacer()
-
             }
         }
-        
     }
-    
-
-
-
-
 }
 
 

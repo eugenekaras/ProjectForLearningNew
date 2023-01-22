@@ -9,9 +9,9 @@ import SwiftUI
 import Firebase
 
 extension ProjectForLearningApp {
-  private func setupAuthentication() {
-    FirebaseApp.configure()
-  }
+    private func setupAuthentication() {
+        FirebaseApp.configure()
+    }
 }
 //final class AppDelegate: NSObject, UIApplicationDelegate {
 //  func application(_ application: UIApplication,
@@ -27,17 +27,19 @@ extension ProjectForLearningApp {
 
 @main
 struct ProjectForLearningApp: App {
-
-
+    
+    @StateObject var viewModel = AuthenticationViewModel()
+    
     init() {
         setupAuthentication()
     }
     
-//    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    //    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {
             SplashScreenView()
+                .environmentObject(viewModel)
         }
     }
 }

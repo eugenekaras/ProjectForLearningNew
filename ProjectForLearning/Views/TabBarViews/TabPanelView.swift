@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TabPanelView: View {
     let tabItems: [TabViewModel]
-    @State private var selectedTab = 0
+    @State private var selectedTab = 1
     
     var body: some View {
         
