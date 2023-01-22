@@ -10,13 +10,8 @@ import SwiftUI
 struct SignInWithGoogle: View {
     
     @EnvironmentObject var viewModel: AuthenticationViewModel
-    
+
     var body: some View {
-        
-        switch viewModel.state {
-        case .signedIn: ContentView()
-        case .signedOut: LoginScreen()
-        }
-        
+        LoginScreen()
     }
 }

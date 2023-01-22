@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @State var isError = false
+
+    @EnvironmentObject var viewModel: AuthenticationViewModel
     
     var body: some View {
         
-        VStack {
-            //            Button("Crash") {
-            //                fatalError("Crash was triggered")
-            //            }
-            TabPanelView(tabItems: tabViewModelArr)
+        switch viewModel.state {
+        case .signedIn:
+            switch viewModel.isShowGeetingPage {
+            case true: GeetingPageView()
+            case false: TabPanelView(tabItems: tabViewModelArr)
+            }
+        case .signedOut: SignInWithGoogle()
         }
+
     }
 }
 

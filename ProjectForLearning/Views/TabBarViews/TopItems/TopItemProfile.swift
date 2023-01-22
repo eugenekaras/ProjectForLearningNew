@@ -16,8 +16,7 @@ struct TopItemProfile: View {
     var body: some View {
         
         VStack {
-            
-            
+
             HStack {
                 
                 NetworkImage(url: user?.profile?.imageURL(withDimension: 200))
@@ -40,10 +39,7 @@ struct TopItemProfile: View {
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
             .padding()
-            
-            
-            
-            
+ 
             Spacer()
             
             Text("Hello, from Profile!")

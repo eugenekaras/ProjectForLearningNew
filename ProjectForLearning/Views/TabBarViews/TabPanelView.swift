@@ -9,13 +9,14 @@ import SwiftUI
 
 struct TabPanelView: View {
     let tabItems: [TabViewModel]
-    @State private var selectedTab = 1
-    
+    @State private var selectedTab = 2
+
     var body: some View {
-        
-        TabView(selection: $selectedTab) {
-            ForEach(tabItems) { tabItem in
-                TabItem(tabViewModel: tabItem)
+        VStack {
+            TabView(selection: $selectedTab) {
+                ForEach(tabItems) { tabItem in
+                    TabItem(tabViewModel: tabItem)
+                }
             }
         }
     }

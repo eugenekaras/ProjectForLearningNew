@@ -13,11 +13,9 @@ struct LoginHeader: View {
             Image(systemName: "bonjour")
                 .font(.system(size: 120))
                 .foregroundColor(.purple)
-//            Text("Welcome")
-//                .font(.largeTitle)
-//                .fontWeight(.medium)
-//                .padding()
-//                .multilineTextAlignment(.center)
+            Text("Study App")
+                .font(.system(size: 36))
+                .foregroundColor(.black.opacity(0.80))
         }
     }
 }

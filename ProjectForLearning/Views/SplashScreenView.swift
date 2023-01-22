@@ -16,14 +16,13 @@ struct SplashScreenView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
     
     var body: some View {
+        
         if isActive {
-
-            switch viewModel.GetSignInState() {
-            case .signedIn: ContentView()
-            case .signedOut: SignInWithGoogle()
-            }
             
-        } else {
+            ContentView()
+            
+        } else{
+            
             VStack{
                 VStack{
                     Image(systemName: "swift")
@@ -43,17 +42,20 @@ struct SplashScreenView: View {
                 }
             }
             .onAppear{
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0){
+                viewModel.signIn()
+                
+                DispatchQueue.main.asyncAfter(deadline:  .now() + 3.0, execute: {
                     withAnimation{
                         self.isActive = true
                     }
-                    
-                }
+                })
             }
         }
         
     }
+    
 }
+
 
 struct SplashScreenView_Previews: PreviewProvider {
     static var previews: some View {

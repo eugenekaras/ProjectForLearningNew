@@ -31,25 +31,20 @@ class AuthenticationViewModel: ObservableObject {
         case signedIn
         case signedOut
     }
-    
+
     @Published var state: SignInState =  .signedOut
+    @Published var isShowGeetingPage: Bool =  false
     
-    func GetSignInState() -> SignInState {
-        switch GIDSignIn.sharedInstance.hasPreviousSignIn() {
-        case true: return .signedIn
-        case false: return .signedOut
-        }
-    }
-    
-    func signIn() {
+    func signIn(){
         
         if GIDSignIn.sharedInstance.hasPreviousSignIn() {
+
             GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
                 self.authenticateUser(for: user, with: error)
             }
-        } else {
+         } else {
             
-            guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+            guard let clientID = FirebaseApp.app()?.options.clientID else {  return }
             
             let config = GIDConfiguration(clientID: clientID)
             
@@ -92,7 +87,5 @@ class AuthenticationViewModel: ObservableObject {
             print(error.localizedDescription)
         }
     }
-    
-    
     
 }

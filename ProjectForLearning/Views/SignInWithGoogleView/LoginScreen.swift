@@ -24,9 +24,8 @@ struct LoginScreen: View {
                 Spacer()
                 
                 GoogleSignInButton{
-                
+                    viewModel.isShowGeetingPage = true
                     viewModel.signIn()
-                        
                 }.padding(20)
  
                 Spacer()
