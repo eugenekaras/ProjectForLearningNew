@@ -15,18 +15,21 @@ extension ProjectForLearningApp {
 }
 
 @main
-struct ProjectForLearningApp: App {
+struct ProjectForLearningApp: App
+{
     
-    @StateObject var viewModel = AuthenticationViewModel()
+    @StateObject var authenticationModel = AuthenticationModel()
+    @StateObject var viewModel = ViewModel()
     
     init() {
         setupAuthentication()
     }
-
+    
     var body: some Scene {
         WindowGroup {
- 
-            SplashScreenView()
+            
+            ContentView()
+                .environmentObject(authenticationModel)
                 .environmentObject(viewModel)
             
         }

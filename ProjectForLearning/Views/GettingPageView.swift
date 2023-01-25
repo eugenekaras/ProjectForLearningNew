@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct GeetingPageView: View {
+struct GettingPageView: View {
     
-    @EnvironmentObject var viewModel: AuthenticationViewModel
+    @EnvironmentObject var authenticationModel: AuthenticationModel
+    @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
         
@@ -23,7 +24,7 @@ struct GeetingPageView: View {
         .onAppear{
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0){
                 withAnimation{
-                    viewModel.isShowGeetingPage = false
+                    viewModel.isShowGettingPage = false
                 }
 
             }
@@ -33,8 +34,8 @@ struct GeetingPageView: View {
     }
 }
 
-struct GeetingPageView_Previews: PreviewProvider {
-    static var previews: some View {
-        GeetingPageView()
-    }
-}
+//struct GeetingPageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        GettingPageView()
+//    }
+//}

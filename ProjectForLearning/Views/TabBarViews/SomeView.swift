@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct TopItemSomeView: View {
+struct SomeView: View {
     var body: some View {
         Text("Hello, from Some View!")
     }
 }
 
-struct TopItemSomeView_Previews: PreviewProvider {
+struct SomeView_Previews: PreviewProvider {
     static var previews: some View {
-        TopItemSomeView()
+        SomeView()
     }
 }
