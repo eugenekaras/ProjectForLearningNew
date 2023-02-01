@@ -8,21 +8,19 @@
 import SwiftUI
 
 struct SplashScreenView: View {
- 
     
     var body: some View {
- 
+        
+        VStack{
             VStack{
-                VStack{
-                    Image(systemName: "swift")
-                        .font(.system(size: 80))
-                        .foregroundColor(.purple)
-                    Text("Study App")
-                        .font(.system(size: 23))
-                        .foregroundColor(.black.opacity(0.80))
-                }
+                Image(systemName: "swift")
+                    .font(.system(size: 80))
+                    .foregroundColor(.purple)
+                Text("Study App")
+                    .font(.system(size: 23))
+                    .foregroundColor(.black.opacity(0.80))
             }
-
+        }
     }
 }
 

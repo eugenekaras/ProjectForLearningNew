@@ -6,13 +6,8 @@
 //
 
 import Foundation
-import SwiftUI
-import UIKit
-
 
 class AppState : ObservableObject {
-    
     var viewState = ViewState()
     var userAuth = UserAuth()
-    
 }

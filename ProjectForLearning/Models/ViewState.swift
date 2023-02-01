@@ -8,7 +8,5 @@
 import Foundation
 
 final class ViewState : ObservableObject {
-    
     @Published var isShowGettingPage: Bool =  false
-    
 }

@@ -12,59 +12,52 @@ import GoogleSignInSwift
 struct SignInView: View {
     
     @EnvironmentObject var userAuth: UserAuth
-    @EnvironmentObject var viewState: ViewState
     
-    @State var message = ""
-    @State var alert = false
- 
-  
+    @State private var messageError = ""
+    @State private var showError = false
+    
+    func signIn() {
+        Task {
+            do {
+                try await userAuth.signIn()
+            } catch {
+                showError(error: error)
+            }
+        }
+    }
+    
+    func signInAnonymously() {
+        Task {
+            do {
+                try await userAuth.signInAnonymously()
+            } catch {
+                showError(error: error)
+            }
+        }
+    }
+    
+    @MainActor
+    func showError(error: Error) {
+        self.messageError = error.localizedDescription
+        self.showError.toggle()
+    }
     
     var body: some View {
-        NavigationView{
+        NavigationView {
             VStack(alignment: .center, spacing: 0) {
-                
                 LoginHeader()
                     .padding(100)
+                
                 Spacer()
                 
                 GoogleSignInButton{
-  
-                    Task {
-                        do{
-                            try await userAuth.signIn(handler: { verified, status in
-                                if !verified {
-                                    self.message = status
-                                    self.alert.toggle()
-                                } 
-
-                            })
- 
-                        } catch{
-
-                        }
-                    }
+                    signIn()
                 }
                 .padding(20)
-                .alert(isPresented: $alert) {
-                    Alert(title: Text("Error"), message: Text(self.message), dismissButton: .default(Text("Ok")))
-                }
                 
- 
-                Button(action: {
-                    Task {
-                        
-                        do{
-                            try await userAuth.signInAnonymously(handler: { verified, status in
-                                if !verified {
-                                    self.message = status
-                                    self.alert.toggle()
-                                }
-                            })
-                        } catch{
-                            
-                        }
-                    }
-                }) {
+                Button {
+                    signInAnonymously()
+                } label: {
                     HStack {
                         Spacer()
                         Text("Use anonymous account")
@@ -72,35 +65,38 @@ struct SignInView: View {
                         Spacer()
                     }
                 }
-                .padding()
+                .frame(height: 40)
                 .background(.black)
                 .padding()
-                .alert(isPresented: $alert) {
-                    Alert(title: Text("Error"), message: Text(self.message), dismissButton: .default(Text("Ok")))
-                    
-                }
+                
+                Spacer()
+            }
+        }
+        .alert(
+            messageError,
+            isPresented: $showError
+        ) {
+            Button("OK") { }
+        }
+    }
+    
+    struct LoginHeader: View {
+        var body: some View {
+            VStack {
+                Image(systemName: "bonjour")
+                    .font(.system(size: 120))
+                    .foregroundColor(.purple)
+                Text("Study App")
+                    .font(.system(size: 36))
+                    .foregroundColor(.black.opacity(0.80))
             }
         }
     }
-}
-
-struct LoginHeader: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "bonjour")
-                .font(.system(size: 120))
-                .foregroundColor(.purple)
-            Text("Study App")
-                .font(.system(size: 36))
-                .foregroundColor(.black.opacity(0.80))
+    
+    struct SignInView_Previews: PreviewProvider {
+        static var previews: some View {
+            SignInView()
         }
     }
+    
 }
-
-
-struct SignInView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignInView()
-    }
-}
-

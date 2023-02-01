@@ -7,29 +7,22 @@
 
 import SwiftUI
 
-struct GettingPageView: View {
-    
-
+struct GreetingPageView: View {
     
     var body: some View {
         
-    
- 
+        VStack{
             VStack{
-                VStack{
-                    Text("Welcome")
-                        .font(.system(size: 38))
-                        .foregroundColor(.black.opacity(0.80))
-                }
+                Text("Welcome")
+                    .font(.system(size: 38))
+                    .foregroundColor(.black.opacity(0.80))
             }
-            
         }
-        
-    
+    }
 }
 
 struct GettingPageView_Previews: PreviewProvider {
     static var previews: some View {
-        GettingPageView()
+        GreetingPageView()
     }
 }

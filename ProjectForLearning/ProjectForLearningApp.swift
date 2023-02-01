@@ -10,9 +10,7 @@ import Firebase
 
  
 @main
-struct ProjectForLearningApp: App
-{
- 
+struct ProjectForLearningApp: App {
     @StateObject var appState = AppState()
     
     init() {
@@ -21,12 +19,10 @@ struct ProjectForLearningApp: App
     
     var body: some Scene {
         WindowGroup {
-            
             ContentView()
                 .environmentObject(appState)
                 .environmentObject(appState.userAuth)
                 .environmentObject(appState.viewState)
-            
         }
     }
 }
