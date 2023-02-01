@@ -8,5 +8,13 @@
 import Foundation
 
 final class ViewState : ObservableObject {
-    @Published var isShowGettingPage: Bool =  false
+    
+    enum ContentViewState {
+        case splash
+        case greeting
+        case signIn
+        case signOut
+    }
+    
+    @Published var contentViewState: ContentViewState =  .splash
 }

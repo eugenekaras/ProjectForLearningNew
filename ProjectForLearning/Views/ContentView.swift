@@ -7,22 +7,37 @@
 
 import SwiftUI
 
+
+
 struct ContentView: View {
     
     @EnvironmentObject var userAuth: UserAuth
     @EnvironmentObject var viewState: ViewState
-    
+
     var body: some View {
         
         Group {
-            switch userAuth.state {
-            case .signedOut: SignInView()
-            case .unknown: SplashScreenView()
-            case .signedIn:TabBarView()
+            switch viewState.contentViewState {
+            case .signOut: SignInView()
+            case .splash: SplashScreenView()
+            case .signIn: TabBarView()
+            case .greeting: GreetingPageView()
             }
+
         }
         .task {
             userAuth.checkSignIn()
+        }
+        .onChange(of: userAuth.state) { [state = userAuth.state] newValue in
+            if (state == .signedOut) && (newValue == .signedIn) {
+                viewState.contentViewState = .greeting
+            } else {
+                switch newValue {
+                case .signedOut: viewState.contentViewState = .signOut
+                case .unknown: viewState.contentViewState = .splash
+                case .signedIn: viewState.contentViewState = .signIn
+                }
+            }
         }
     }
 }

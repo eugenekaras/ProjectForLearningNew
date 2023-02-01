@@ -9,6 +9,8 @@ import SwiftUI
 
 struct GreetingPageView: View {
     
+    @EnvironmentObject var viewState: ViewState
+    
     var body: some View {
         
         VStack{
@@ -16,6 +18,14 @@ struct GreetingPageView: View {
                 Text("Welcome")
                     .font(.system(size: 38))
                     .foregroundColor(.black.opacity(0.80))
+            }
+        }
+        .onAppear{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0){
+                withAnimation{
+                    viewState.contentViewState = .signIn
+                }
+
             }
         }
     }
