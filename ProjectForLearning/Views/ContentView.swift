@@ -9,30 +9,41 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @EnvironmentObject var authenticationModel: AuthenticationModel
-    @EnvironmentObject var viewModel: ViewModel
+    @EnvironmentObject var userAuth: UserAuth
+    @EnvironmentObject var viewState: ViewState
+ 
     
     var body: some View {
         
-        if !viewModel.isShowSplashScreenView {
-            switch authenticationModel.state {
-            case .signedIn:
-                switch viewModel.isShowGettingPage {
-                case true: GettingPageView()
-                case false: TabBarView()
+        Group {
+  
+                switch userAuth.state {
+                case .signedOut: SignInView()
+                case .unknown: SplashScreenView()
+                case .signedIn:TabBarView()
+                    //                switch viewState.isShowGettingPage {
+                    //                case true: GettingPageView()
+                    //                case false: TabBarView()
+                    //                }
                 }
-            case .signedOut: SignInView()
+                
             }
-        } else {
-            SplashScreenView()
+
+        .task {
+            userAuth.checkSignIn()
+            
+            sleep(3)
         }
-        
+
+
+            
+        }
+    }
+
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView( )
     }
 }
-
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}

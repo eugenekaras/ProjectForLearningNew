@@ -16,20 +16,22 @@ struct TabBarView: View {
         TabView {
             SomeView()
                 .tabItem {
-                    Label(tabViewModels[0].tabItem.rawValue, systemImage: tabViewModels[0].image)
-                }.tag(tabViewModels[0].id)
+                    Label("Some View", systemImage: "square.dashed")
+                }.tag(0)
             
             MainView()
                 .tabItem {
-                    Label(tabViewModels[1].tabItem.rawValue, systemImage: tabViewModels[1].image)
-                }.tag(tabViewModels[1].id)
+                    Label("Main", systemImage: "app")
+                }.tag(1)
             ProfileView()
                 .tabItem {
-                    Label(tabViewModels[2].tabItem.rawValue, systemImage: tabViewModels[2].image)
-                }.tag(tabViewModels[2].id)
+                    Label("Profile", systemImage: "person.fill")
+                }.tag(2)
         }
     }
 }
+
+
 
 struct TabBarView_Previews: PreviewProvider {
     static var previews: some View {

@@ -8,29 +8,24 @@
 import SwiftUI
 import Firebase
 
-extension ProjectForLearningApp {
-    private func setupAuthentication() {
-        FirebaseApp.configure()
-    }
-}
-
+ 
 @main
 struct ProjectForLearningApp: App
 {
-    
-    @StateObject var authenticationModel = AuthenticationModel()
-    @StateObject var viewModel = ViewModel()
+ 
+    @StateObject var appState = AppState()
     
     init() {
-        setupAuthentication()
+        FirebaseApp.configure()
     }
     
     var body: some Scene {
         WindowGroup {
             
             ContentView()
-                .environmentObject(authenticationModel)
-                .environmentObject(viewModel)
+                .environmentObject(appState)
+                .environmentObject(appState.userAuth)
+                .environmentObject(appState.viewState)
             
         }
     }

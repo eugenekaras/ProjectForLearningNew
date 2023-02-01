@@ -12,8 +12,10 @@ import GoogleSignIn
 
 struct ProfileView: View {
     
-    @EnvironmentObject var viewModel: AuthenticationModel
+    @EnvironmentObject var userAuth: UserAuth
     @State private var isShowingActionSheet = false
+    @State var message = ""
+    @State var alert = false
     
     private let user = GIDSignIn.sharedInstance.currentUser
     
@@ -24,16 +26,28 @@ struct ProfileView: View {
                 
                 HStack {
                     
-                    NetworkImage(url: user?.profile?.imageURL(withDimension: 200))
+//                    NetworkImage(url: user?.profile?.imageURL(withDimension: 200))
+//                        .aspectRatio(contentMode: .fit)
+//                        .frame(width: 100, height: 100, alignment: .center)
+//                        .cornerRadius(8)
+                    
+//                    VStack(alignment: .leading) {
+//                        Text(user?.profile?.name ?? "")
+//                            .font(.headline)
+//
+//                        Text(user?.profile?.email ?? "")
+//                            .font(.subheadline)
+//                    }
+                    
+                    NetworkImage(url: userAuth.session?.url)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 100, height: 100, alignment: .center)
                         .cornerRadius(8)
-                    
                     VStack(alignment: .leading) {
-                        Text(user?.profile?.name ?? "")
+                        Text(userAuth.session?.displayName ?? "Anonymous")
                             .font(.headline)
                         
-                        Text(user?.profile?.email ?? "")
+                        Text(userAuth.session?.email ?? "")
                             .font(.subheadline)
                     }
                     
@@ -65,11 +79,24 @@ struct ProfileView: View {
                 .actionSheet(isPresented: $isShowingActionSheet) {
                     ActionSheet(title: Text("Confirm your actions"),message: Text("Are you sure you want to log out of your profile?"),
                                 buttons: [.default(Text("Delete account"),action: {
-                        viewModel.deleteUser()
+                        userAuth.deleteUser(output: { verified, status in
+                            if !verified {
+                                self.message = status
+                                self.alert.toggle()
+                            }
+                        })
                     }),.destructive(Text("Sign out"),action: {
-                        viewModel.signOut()
+                        userAuth.signOut(output: { verified, status in
+                            if !verified {
+                                self.message = status
+                                self.alert.toggle()
+                            }
+                        })
                     })
                                           ,.cancel()])
+                }
+                .alert(isPresented: $alert) {
+                    Alert(title: Text("Error"), message: Text(self.message), dismissButton: .default(Text("Ok")))
                 }
                 
             }

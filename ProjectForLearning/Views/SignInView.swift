@@ -11,8 +11,13 @@ import GoogleSignInSwift
 
 struct SignInView: View {
     
-    @EnvironmentObject var authenticationModel: AuthenticationModel
-    @EnvironmentObject var viewModel: ViewModel
+    @EnvironmentObject var userAuth: UserAuth
+    @EnvironmentObject var viewState: ViewState
+    
+    @State var message = ""
+    @State var alert = false
+ 
+  
     
     var body: some View {
         NavigationView{
@@ -23,25 +28,38 @@ struct SignInView: View {
                 Spacer()
                 
                 GoogleSignInButton{
+  
                     Task {
                         do{
-                            try await authenticationModel.signIn()
-                            if authenticationModel.state == .signedIn {
-                                viewModel.isShowGettingPage = true
-                            }
+                            try await userAuth.signIn(handler: { verified, status in
+                                if !verified {
+                                    self.message = status
+                                    self.alert.toggle()
+                                } 
+
+                            })
+ 
                         } catch{
-                            
+
                         }
                     }
-                }.padding(20)
+                }
+                .padding(20)
+                .alert(isPresented: $alert) {
+                    Alert(title: Text("Error"), message: Text(self.message), dismissButton: .default(Text("Ok")))
+                }
                 
+ 
                 Button(action: {
                     Task {
+                        
                         do{
-                            try await authenticationModel.signInAnonymously()
-                            if authenticationModel.state == .signedIn {
-                                viewModel.isShowGettingPage = true
-                            }
+                            try await userAuth.signInAnonymously(handler: { verified, status in
+                                if !verified {
+                                    self.message = status
+                                    self.alert.toggle()
+                                }
+                            })
                         } catch{
                             
                         }
@@ -57,8 +75,10 @@ struct SignInView: View {
                 .padding()
                 .background(.black)
                 .padding()
-                
-                Spacer()
+                .alert(isPresented: $alert) {
+                    Alert(title: Text("Error"), message: Text(self.message), dismissButton: .default(Text("Ok")))
+                    
+                }
             }
         }
     }
