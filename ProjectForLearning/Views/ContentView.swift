@@ -7,37 +7,53 @@
 
 import SwiftUI
 
-
+enum ContentViewState {
+    case splash
+    case greeting
+    case signIn
+    case signOut
+}
 
 struct ContentView: View {
     
     @EnvironmentObject var userAuth: UserAuth
-    @EnvironmentObject var viewState: ViewState
-
+    
+    @State private var contentViewState = ContentViewState.splash
+    
+    func updateViewState(with signInState: UserAuth.SignInState) {
+        var contentViewState = contentViewState
+        
+        if (contentViewState == .signOut) && (signInState == .signedIn) {
+            self.contentViewState = .greeting
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0){
+                self.contentViewState = .signIn
+            }
+        } else {
+            switch signInState {
+            case .signedOut: self.contentViewState = .signOut
+            case .unknown: self.contentViewState = .splash
+            case .signedIn: self.contentViewState = .signIn
+            }
+        }
+    }
+    
     var body: some View {
         
         Group {
-            switch viewState.contentViewState {
+            switch self.contentViewState {
             case .signOut: SignInView()
             case .splash: SplashScreenView()
             case .signIn: TabBarView()
             case .greeting: GreetingPageView()
             }
-
         }
+        .animation(.default, value: self.contentViewState)
         .task {
             userAuth.checkSignIn()
         }
-        .onChange(of: userAuth.state) { [state = userAuth.state] newValue in
-            if (state == .signedOut) && (newValue == .signedIn) {
-                viewState.contentViewState = .greeting
-            } else {
-                switch newValue {
-                case .signedOut: viewState.contentViewState = .signOut
-                case .unknown: viewState.contentViewState = .splash
-                case .signedIn: viewState.contentViewState = .signIn
-                }
-            }
+        .onChange(of: userAuth.state) { newValue in
+            updateViewState(with: newValue)
         }
     }
 }

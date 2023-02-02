@@ -8,7 +8,6 @@
 import SwiftUI
 import Firebase
 
- 
 @main
 struct ProjectForLearningApp: App {
     @StateObject var appState = AppState()
@@ -22,7 +21,6 @@ struct ProjectForLearningApp: App {
             ContentView()
                 .environmentObject(appState)
                 .environmentObject(appState.userAuth)
-                .environmentObject(appState.viewState)
         }
     }
 }

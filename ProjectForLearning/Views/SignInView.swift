@@ -8,7 +8,6 @@
 import SwiftUI
 import GoogleSignInSwift
 
-
 struct SignInView: View {
     
     @EnvironmentObject var userAuth: UserAuth

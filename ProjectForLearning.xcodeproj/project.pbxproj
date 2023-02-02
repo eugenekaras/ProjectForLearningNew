@@ -13,7 +13,6 @@
 		E980591029780D6F006379E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E980590F29780D6F006379E8 /* Assets.xcassets */; };
 		E980591329780D6F006379E8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E980591229780D6F006379E8 /* Preview Assets.xcassets */; };
 		E98F2266298A7F0A0074C059 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98F2265298A7F0A0074C059 /* User.swift */; };
-		E98F226A298AD0080074C059 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98F2269298AD0080074C059 /* ViewState.swift */; };
 		E9A6774E297B02FF009CF826 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A6774D297B02FF009CF826 /* TabBarView.swift */; };
 		E9A67750297B0314009CF826 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A6774F297B0314009CF826 /* AppState.swift */; };
 		E9A67754297B09A8009CF826 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A67753297B09A8009CF826 /* MainView.swift */; };
@@ -38,7 +37,6 @@
 		E980590F29780D6F006379E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E980591229780D6F006379E8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E98F2265298A7F0A0074C059 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		E98F2269298AD0080074C059 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		E9A677472979E6A8009CF826 /* ProjectForLearning.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ProjectForLearning.entitlements; sourceTree = "<group>"; };
 		E9A6774D297B02FF009CF826 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		E9A6774F297B0314009CF826 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 			isa = PBXGroup;
 			children = (
 				E9A6774F297B0314009CF826 /* AppState.swift */,
-				E98F2269298AD0080074C059 /* ViewState.swift */,
 				E9A67786297C7000009CF826 /* UserAuth.swift */,
 				E98F2265298A7F0A0074C059 /* User.swift */,
 			);
@@ -257,7 +254,6 @@
 				E9A67754297B09A8009CF826 /* MainView.swift in Sources */,
 				E98F2266298A7F0A0074C059 /* User.swift in Sources */,
 				E9A6774E297B02FF009CF826 /* TabBarView.swift in Sources */,
-				E98F226A298AD0080074C059 /* ViewState.swift in Sources */,
 				E93EBC042979C8AB007940BA /* SplashScreenView.swift in Sources */,
 				E9A6775A297B245A009CF826 /* SignInView.swift in Sources */,
 			);
