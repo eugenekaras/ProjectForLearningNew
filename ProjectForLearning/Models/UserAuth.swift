@@ -107,7 +107,6 @@ class UserAuth: ObservableObject {
     
     func deleteUser() async throws {
         if let user = Auth.auth().currentUser {
-            
             let idToken =  try await user.getIDToken()
             let accessToken = try await user.idTokenForcingRefresh(true)
             

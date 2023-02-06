@@ -20,14 +20,4 @@ struct User {
         self.displayName = displayName
         self.url = url
     }
-    
-//    func saveCredential(credential: AuthCredential?) {
-//        let defaults = UserDefaults.standard
-//        defaults.set(credential, forKey: "credential")
-//    }
-    
-//    func getCredential() -> AuthCredential {
-//        let defaults = UserDefaults.standard
-//        return defaults.object(forKey: "credential") as! AuthCredential
-//    }
 }
