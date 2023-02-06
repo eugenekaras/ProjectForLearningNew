@@ -33,24 +33,27 @@ class UserAuth: ObservableObject {
         self.state = .signedIn
     }
     
-    func signIn() async throws {
-         guard let clientID = FirebaseApp.app()?.options.clientID else {
-             fatalError("Firebase SDK is not integrated properly")
-         }
-         
-         let configuration = GIDConfiguration(clientID: clientID)
-         GIDSignIn.sharedInstance.configuration = configuration
-         
-         guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene else {
-             fatalError("Error getting UIWindowScene")
-         }
-         guard let rootViewController = await windowScene.windows.first?.rootViewController else {
-             fatalError("Error getting rootViewController")
-         }
-         
-         let signResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
-         try await authenticateUser(for: signResult.user)
-     }
+    private func getCredential() async throws -> AuthCredential {
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            fatalError("Firebase SDK is not integrated properly")
+        }
+        let configuration = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = configuration
+        
+        guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            fatalError("Error getting UIWindowScene")
+        }
+        guard let rootViewController = await windowScene.windows.first?.rootViewController else {
+            fatalError("Error getting rootViewController")
+        }
+        let signResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+        
+        let accessToken = signResult.user.accessToken
+        guard let idToken = signResult.user.idToken else {
+            fatalError("Error getting idToken")
+        }
+        return GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
+    }
     
     func signInAnonymously() async throws {
         let authResult = try await Auth.auth().signInAnonymously()
@@ -66,12 +69,8 @@ class UserAuth: ObservableObject {
         }
     }
     
-    private func authenticateUser(for user: GIDGoogleUser) async throws {
-        let accessToken = user.accessToken
-        guard let idToken = user.idToken else {
-            fatalError("Error getting idToken")
-        }
-        let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
+    func signIn() async throws {
+        let credential = try await getCredential()
         let authResult =  try await Auth.auth().signIn(with: credential)
         
         DispatchQueue.main.asyncAfter(deadline: .now()){
@@ -85,6 +84,25 @@ class UserAuth: ObservableObject {
         }
     }
     
+    func reSignIn() async throws {
+        if let user = Auth.auth().currentUser {
+            let credential = try await getCredential()
+            let authResult =  try await user.reauthenticate(with: credential)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now()){
+                self.session =  User(
+                    userId: authResult.user.uid,
+                    email: authResult.user.email,
+                    displayName: authResult.user.displayName,
+                    url: authResult.user.photoURL
+                )
+                self.state = .signedIn
+            }
+        } else {
+            fatalError("Error re-authenticate a user")
+        }
+    }
+    
     func signOut() async throws {
         let firebaseAuth = Auth.auth()
         try firebaseAuth.signOut()
@@ -94,27 +112,11 @@ class UserAuth: ObservableObject {
         }
     }
     
-    func deleteUserOld()  async throws {
+    func deleteUser() async throws {
         guard let user = Auth.auth().currentUser else {
             fatalError("Error getting current user for delete")
         }
-        DispatchQueue.main.asyncAfter(deadline: .now()){
-            self.session = nil
-            self.state = .signedOut
-        }
         try await user.delete()
-    }
-    
-    func deleteUser() async throws {
-        if let user = Auth.auth().currentUser {
-            let idToken =  try await user.getIDToken()
-            let accessToken = try await user.idTokenForcingRefresh(true)
-            
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-            try await user.reauthenticate(with: credential)
-            
-            try await user.delete()
-        }
         DispatchQueue.main.asyncAfter(deadline: .now()){
             self.session = nil
             self.state = .signedOut

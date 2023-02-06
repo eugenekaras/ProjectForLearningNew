@@ -56,6 +56,7 @@ struct SignInView: View {
         Task {
             do {
                 try await userAuth.signIn()
+                userAuth.state = .signedIn
             } catch {
                 showError(error: error)
             }
