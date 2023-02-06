@@ -9,37 +9,10 @@ import SwiftUI
 import GoogleSignInSwift
 
 struct SignInView: View {
-    
     @EnvironmentObject var userAuth: UserAuth
     
     @State private var messageError = ""
     @State private var showError = false
-    
-    func signIn() {
-        Task {
-            do {
-                try await userAuth.signIn()
-            } catch {
-                showError(error: error)
-            }
-        }
-    }
-    
-    func signInAnonymously() {
-        Task {
-            do {
-                try await userAuth.signInAnonymously()
-            } catch {
-                showError(error: error)
-            }
-        }
-    }
-    
-    @MainActor
-    func showError(error: Error) {
-        self.messageError = error.localizedDescription
-        self.showError.toggle()
-    }
     
     var body: some View {
         NavigationView {
@@ -79,23 +52,38 @@ struct SignInView: View {
         }
     }
     
-    struct LoginHeader: View {
-        var body: some View {
-            VStack {
-                Image(systemName: "bonjour")
-                    .font(.system(size: 120))
-                    .foregroundColor(.purple)
-                Text("Study App")
-                    .font(.system(size: 36))
-                    .foregroundColor(.black.opacity(0.80))
+    func signIn() {
+        Task {
+            do {
+                try await userAuth.signIn()
+            } catch {
+                showError(error: error)
             }
         }
     }
     
-    struct SignInView_Previews: PreviewProvider {
-        static var previews: some View {
-            SignInView()
+    func signInAnonymously() {
+        Task {
+            do {
+                try await userAuth.signInAnonymously()
+            } catch {
+                showError(error: error)
+            }
         }
     }
     
+    @MainActor
+    func showError(error: Error) {
+        self.messageError = error.localizedDescription
+        self.showError.toggle()
+    }
+}
+
+struct SignInView_Previews: PreviewProvider {
+    static var userAuth = UserAuth()
+    
+    static var previews: some View {
+        SignInView()
+            .environmentObject(userAuth)
+    }
 }

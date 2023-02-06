@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct SplashScreenView: View {
-    
     var body: some View {
-        
         VStack{
             VStack{
                 Image(systemName: "swift")

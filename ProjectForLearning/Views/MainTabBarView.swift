@@ -7,18 +7,15 @@
 
 import SwiftUI
 
-struct TabBarView: View {
-    
+struct MainTabBarView: View {
     @State private var selectedTab = 2
     
     var body: some View {
-        
         TabView {
             SomeView()
                 .tabItem {
                     Label("Some View", systemImage: "square.dashed")
                 }.tag(0)
-            
             MainView()
                 .tabItem {
                     Label("Main", systemImage: "app")
@@ -32,7 +29,10 @@ struct TabBarView: View {
 }
 
 struct TabBarView_Previews: PreviewProvider {
+    static var userAuth = UserAuth()
+    
     static var previews: some View {
-        TabBarView()
+        MainTabBarView()
+            .environmentObject(userAuth)
     }
 }

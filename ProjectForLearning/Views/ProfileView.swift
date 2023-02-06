@@ -8,39 +8,12 @@
 import SwiftUI
 
 struct ProfileView: View {
-    
     @EnvironmentObject var userAuth: UserAuth
     
     @State private var isShowingActionSheet = false
     @State private var messageError = ""
     @State private var showError = false
-    
-    func deleteUser() {
-        Task {
-            do {
-                try await userAuth.deleteUser()
-            } catch {
-                showError(error: error)
-            }
-        }
-    }
-    
-    func signOut() {
-        Task {
-            do {
-                try await userAuth.signOut()
-            } catch {
-                showError(error: error)
-            }
-        }
-    }
-    
-    @MainActor
-    func showError(error: Error) {
-        self.messageError = error.localizedDescription
-        self.showError.toggle()
-    }
-    
+
     var body: some View {
         ZStack {
             VStack {
@@ -102,28 +75,39 @@ struct ProfileView: View {
             }
         }
     }
-}
-
-struct NetworkImage: View {
-    let url: URL?
     
-    var body: some View {
-        if let url = url,
-           let data = try? Data(contentsOf: url),
-           let uiImage = UIImage(data: data) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-        } else {
-            Image(systemName: "person.circle.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+    func deleteUser() {
+        Task {
+            do {
+                try await userAuth.deleteUser()
+            } catch {
+                showError(error: error)
+            }
         }
+    }
+    
+    func signOut() {
+        Task {
+            do {
+                try await userAuth.signOut()
+            } catch {
+                showError(error: error)
+            }
+        }
+    }
+    
+    @MainActor
+    func showError(error: Error) {
+        self.messageError = error.localizedDescription
+        self.showError.toggle()
     }
 }
 
 struct ProfileView_Previews: PreviewProvider {
+    static var userAuth = UserAuth()
+    
     static var previews: some View {
         ProfileView()
+            .environmentObject(userAuth)
     }
 }

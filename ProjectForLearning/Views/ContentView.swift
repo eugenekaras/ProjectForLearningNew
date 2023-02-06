@@ -15,15 +15,30 @@ enum ContentViewState {
 }
 
 struct ContentView: View {
-    
     @EnvironmentObject var userAuth: UserAuth
     
     @State private var contentViewState = ContentViewState.splash
     
+    var body: some View {
+        Group {
+            switch self.contentViewState {
+            case .signOut: SignInView()
+            case .splash: SplashScreenView()
+            case .signIn: MainTabBarView()
+            case .greeting: GreetingPageView()
+            }
+        }
+        .animation(.default, value: self.contentViewState)
+        .task {
+            userAuth.checkSignIn()
+        }
+        .onChange(of: userAuth.state) { newValue in
+            updateViewState(with: newValue)
+        }
+    }
+    
     func updateViewState(with signInState: UserAuth.SignInState) {
-        var contentViewState = contentViewState
-        
-        if (contentViewState == .signOut) && (signInState == .signedIn) {
+        if (self.contentViewState == .signOut) && (signInState == .signedIn) {
             self.contentViewState = .greeting
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0){
@@ -37,29 +52,13 @@ struct ContentView: View {
             }
         }
     }
-    
-    var body: some View {
-        
-        Group {
-            switch self.contentViewState {
-            case .signOut: SignInView()
-            case .splash: SplashScreenView()
-            case .signIn: TabBarView()
-            case .greeting: GreetingPageView()
-            }
-        }
-        .animation(.default, value: self.contentViewState)
-        .task {
-            userAuth.checkSignIn()
-        }
-        .onChange(of: userAuth.state) { newValue in
-            updateViewState(with: newValue)
-        }
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {
+    static var userAuth = UserAuth()
+    
     static var previews: some View {
-        ContentView( )
+        ContentView()
+            .environmentObject(userAuth)
     }
 }

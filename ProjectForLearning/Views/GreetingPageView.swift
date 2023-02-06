@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct GreetingPageView: View {
-    
     var body: some View {
-        
         VStack{
             VStack{
                 Text("Welcome")
