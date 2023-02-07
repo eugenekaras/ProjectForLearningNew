@@ -20,19 +20,25 @@ class UserAuth: ObservableObject {
         case signedOut
     }
     
-    @Published var session: User?
-    @Published var state: SignInState =  .unknown
+    @Published var user: User?
+    @Published var state: SignInState = .unknown
     
-    func checkSignIn() {
+    @MainActor
+    func checkUser() {
         guard let user = Auth.auth().currentUser else {
-            self.session = nil
+            self.user = nil
             self.state = .signedOut
             return
         }
-        self.session =  User( userId: user.uid, email: user.email, displayName: user.displayName, url: user.photoURL)
+        self.user = User(
+            userId: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            url: user.photoURL)
         self.state = .signedIn
     }
     
+    @MainActor
     private func getCredential() async throws -> AuthCredential {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
             fatalError("Firebase SDK is not integrated properly")
@@ -40,10 +46,10 @@ class UserAuth: ObservableObject {
         let configuration = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = configuration
         
-        guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
             fatalError("Error getting UIWindowScene")
         }
-        guard let rootViewController = await windowScene.windows.first?.rootViewController else {
+        guard let rootViewController = windowScene.windows.first?.rootViewController else {
             fatalError("Error getting rootViewController")
         }
         let signResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
@@ -56,60 +62,28 @@ class UserAuth: ObservableObject {
     }
     
     func signInAnonymously() async throws {
-        let authResult = try await Auth.auth().signInAnonymously()
-
-        DispatchQueue.main.asyncAfter(deadline: .now()){
-            self.session = User(
-                userId: authResult.user.uid,
-                email: authResult.user.email,
-                displayName: authResult.user.displayName,
-                url: authResult.user.photoURL
-            )
-            self.state = .signedIn
-        }
+        try await Auth.auth().signInAnonymously()
+        await checkUser()
     }
     
     func signIn() async throws {
         let credential = try await getCredential()
-        let authResult =  try await Auth.auth().signIn(with: credential)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now()){
-            self.session =  User(
-                userId: authResult.user.uid,
-                email: authResult.user.email,
-                displayName: authResult.user.displayName,
-                url: authResult.user.photoURL
-            )
-            self.state = .signedIn
-        }
+        try await Auth.auth().signIn(with: credential)
+        await checkUser()
     }
     
-    func reSignIn() async throws {
-        if let user = Auth.auth().currentUser {
-            let credential = try await getCredential()
-            let authResult =  try await user.reauthenticate(with: credential)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now()){
-                self.session =  User(
-                    userId: authResult.user.uid,
-                    email: authResult.user.email,
-                    displayName: authResult.user.displayName,
-                    url: authResult.user.photoURL
-                )
-                self.state = .signedIn
-            }
-        } else {
+    func reauthenticate() async throws {
+        guard let user = Auth.auth().currentUser else {
             fatalError("Error re-authenticate a user")
         }
+        let credential = try await getCredential()
+        try await user.reauthenticate(with: credential)
     }
     
     func signOut() async throws {
         let firebaseAuth = Auth.auth()
         try firebaseAuth.signOut()
-        DispatchQueue.main.asyncAfter(deadline: .now()){
-            self.session = nil
-            self.state = .signedOut
-        }
+        await checkUser()
     }
     
     func deleteUser() async throws {
@@ -117,10 +91,7 @@ class UserAuth: ObservableObject {
             fatalError("Error getting current user for delete")
         }
         try await user.delete()
-        DispatchQueue.main.asyncAfter(deadline: .now()){
-            self.session = nil
-            self.state = .signedOut
-        }
+        await checkUser()
     }
 }
 

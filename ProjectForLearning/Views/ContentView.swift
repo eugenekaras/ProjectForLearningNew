@@ -22,15 +22,15 @@ struct ContentView: View {
     var body: some View {
         Group {
             switch self.contentViewState {
-            case .signOut: SignInView()
             case .splash: SplashScreenView()
-            case .signIn: MainTabBarView()
             case .greeting: GreetingPageView()
+            case .signIn: MainTabBarView()
+            case .signOut: SignInView()
             }
         }
         .animation(.default, value: self.contentViewState)
         .task {
-            userAuth.checkSignIn()
+            userAuth.checkUser()
         }
         .onChange(of: userAuth.state) { newValue in
             updateViewState(with: newValue)
@@ -46,9 +46,9 @@ struct ContentView: View {
             }
         } else {
             switch signInState {
-            case .signedOut: self.contentViewState = .signOut
             case .unknown: self.contentViewState = .splash
             case .signedIn: self.contentViewState = .signIn
+            case .signedOut: self.contentViewState = .signOut
             }
         }
     }

@@ -13,8 +13,9 @@ struct LoginHeader: View {
             Image(systemName: "bonjour")
                 .font(.system(size: 120))
                 .foregroundColor(.purple)
+                .padding()
             Text("Study App")
-                .font(.system(size: 36))
+                .font(.system(size: 18))
                 .foregroundColor(.black.opacity(0.80))
         }
     }

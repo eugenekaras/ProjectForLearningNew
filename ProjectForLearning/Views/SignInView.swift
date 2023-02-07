@@ -48,7 +48,7 @@ struct SignInView: View {
             messageError,
             isPresented: $showError
         ) {
-            Button("OK") { }
+            Button("Ok") { }
         }
     }
     

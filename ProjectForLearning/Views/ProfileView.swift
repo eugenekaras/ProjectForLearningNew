@@ -24,15 +24,15 @@ struct ProfileView: View {
         ZStack {
             VStack {
                 HStack {
-                    NetworkImage(url: userAuth.session?.url)
+                    UserImage(url: userAuth.user?.url)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 100, height: 100, alignment: .center)
                         .cornerRadius(8)
                     VStack(alignment: .leading) {
-                        Text(userAuth.session?.displayName ?? "Anonymous")
+                        Text(userAuth.user?.displayName ?? "Anonymous")
                             .font(.headline)
                         
-                        Text(userAuth.session?.email ?? "")
+                        Text(userAuth.user?.email ?? "")
                             .font(.subheadline)
                     }
                     Spacer()
@@ -51,7 +51,7 @@ struct ProfileView: View {
                 Button  {
                     self.isShowingActionSheet = true
                 } label: {
-                    Text("Sign Out")
+                    Text("Sign out")
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -97,7 +97,7 @@ struct ProfileView: View {
             }
         }
     }
-    
+
     func deleteUser() {
         Task {
             do {
@@ -110,7 +110,7 @@ struct ProfileView: View {
     func reSignAndDeleteUser() {
         Task {
             do {
-                try await userAuth.reSignIn()
+                try await userAuth.reauthenticate()
                 try await userAuth.deleteUser()
             } catch {
                 showAlert(error: error)

@@ -1,0 +1,47 @@
+/* 
+  Localizable.strings
+  ProjectForLearning
+
+  Created by Евгений Карась on 7.02.23.
+  
+*/
+
+// MARK: MainTabBarView
+"Some View" = "Некоторый экран";
+"Main" = "Главный экран";
+"Profile" = "Профиль";
+// MARK: MainView
+"Hello, from Main View!" = "Привет из главного экрана";
+
+// MARK: ProfileView
+"%@Anonymous" = "%@Анонимный пользователь";
+"Hello, from Profile!" = "Привет из профиля";
+"Sign out"  = "Выход";
+"Confirm your actions" = "Подтвердите свои действия";
+"Are you su re you want to log out of your profile?" = "Вы уверены, что хотите выйти из своего профиля?";
+"Delete account" = "Удалить аккаунт";
+"Cancel" = "Отмена";
+"Delete" = "Удалить";
+"Ok" = "Хорошо";
+"You need to login again" = "Вам нужно снова войти в аккаунт google";
+"Are you sure to delete the user?" = "Вы уверены, что хотите удалить пользователя?";
+
+// MARK: SomeView
+"Hello, from Some View!" = "Привет, с некоторого экрана!";
+
+// MARK: SplashScreenView
+"Study App" = "Учебное приложение";
+
+// MARK: GreetingPageView
+"Welcome" = "Добро пожаловать";
+
+// MARK: SignInView
+"Use anonymous account" = "Использовать анонимный аккаунт";
+
+// MARK: UserAuth
+"Firebase SDK is not integrated properly" = "Firebase SDK не интегрирован должным образом";
+"Error getting UIWindowScene" = "Ошибка получения UIWindowScene";
+"Error getting rootViewController" = "Ошибка получения rootViewController";
+"Error getting idToken" = "Ошибка получения idToken";
+"Error re-authenticate a user" = "Ошибка повторной аутентификации пользователя";
+"Error getting current user for delete" = "Ошибка получения текущего пользователя для удаления";

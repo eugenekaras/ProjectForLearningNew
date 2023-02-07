@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseAuth
 
-struct User {
+struct User: Equatable {
     var userId: String
     var email: String?
     var displayName: String?
