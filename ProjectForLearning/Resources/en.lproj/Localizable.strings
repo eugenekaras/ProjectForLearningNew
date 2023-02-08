@@ -1,0 +1,47 @@
+/* 
+  Localizable.strings
+  ProjectForLearning
+
+  Created by Евгений Карась on 7.02.23.
+  
+*/
+
+// MARK: MainTabBarView
+"Some View" = "Some View";
+"Main" = "Main";
+"Profile" = "Profile";
+// MARK: MainView
+"Hello, from Main View!" = "Hello, from Main View!";
+
+// MARK: ProfileView
+"%@Anonymous" = "%@Anonymous";
+"Hello, from Profile!" = "Hello, from Profile!";
+"Sign out"  = "Sign out";
+"Confirm your actions" = "Confirm your actions";
+"Are you su re you want to log out of your profile?" = "Are you su re you want to log out of your profile?";
+"Delete account" = "Delete account";
+"Cancel" = "Cancel";
+"Delete" = "Delete";
+"Ok" = "Ok";
+"You need to login again" = "You need to login again";
+"Are you sure to delete the user?" = "Are you sure to delete the user?";
+
+// MARK: SomeView
+"Hello, from Some View!" = "Hello, from Some View!";
+
+// MARK: SplashScreenView
+"Study App" = "Study App";
+
+// MARK: GreetingPageView
+"Welcome" = "Welcome";
+
+// MARK: SignInView
+"Use anonymous account" = "Use anonymous account";
+
+// MARK: UserAuth
+"Firebase SDK is not integrated properly" = "Firebase SDK is not integrated properly";
+"Error getting UIWindowScene" = "Error getting UIWindowScene";
+"Error getting rootViewController" = "Error getting rootViewController";
+"Error getting idToken" = "Error getting idToken";
+"Error re-authenticate a user" = "Error re-authenticate a user";
+"Error getting current user for delete" = "Error getting current user for delete";

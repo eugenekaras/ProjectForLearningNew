@@ -6,19 +6,25 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileView: View {
-    enum TypeAlert {
-        case errorOther
-        case errorDeletingUser
+    enum ProfileViewError: LocalizedError {
+        case unknownError(error: Error)
+        var errorDescription: String? {
+            switch self {
+            case .unknownError(let error):
+                return error.localizedDescription
+            }
+        }
     }
     @EnvironmentObject var userAuth: UserAuth
     
     @State private var isShowingActionSheet = false
-    @State private var showAlert = false
-    @State private var typeAlert: TypeAlert  = .errorOther
-    @State private var messageError = ""
-    @State private var titleError = ""
+    @State private var isShowingDeleteUserDialog = false
+    @State private var showError = false
+    @State private var error: ProfileViewError? = .unknownError(error: NSError(domain: "Test", code: 1) as Error)
+    let ERROR_REQUIRES_RECENT_LOGIN = 17014
     
     var body: some View {
         ZStack {
@@ -71,30 +77,15 @@ struct ProfileView: View {
                                           ,.cancel()])
                 }
             }
-            .alert(isPresented: $showAlert) {
-                switch self.typeAlert {
-                case .errorDeletingUser:
-                    return  Alert(
-                        title:  Text(titleError),
-                        message: Text(messageError),
-                        primaryButton: .default(
-                            Text("Cancel"),
-                            action: { }
-                        ),
-                        secondaryButton: .destructive(
-                            Text("Delete"),
-                            action: {
-                                reSignAndDeleteUser()
-                            }
-                        )
-                    )
-                case .errorOther:
-                    return  Alert(
-                        title: Text(titleError),
-                        dismissButton: .default(Text("Ok"))
-                    )
+            .alert(isPresented: $showError, error: error, actions: {})
+            .confirmationDialog("Are you sure you want to delete your account?", isPresented: $isShowingDeleteUserDialog, actions: {
+                Button("Delete", role: .destructive) {
+                    reauthenticateAndDeleteUser()
                 }
-            }
+                Button("No", role: .cancel) {
+                    isShowingDeleteUserDialog = false
+                }
+            })
         }
     }
 
@@ -103,17 +94,17 @@ struct ProfileView: View {
             do {
                 try await userAuth.deleteUser()
             } catch {
-                showAlert(error: error)
+                showError(error: error)
             }
         }
     }
-    func reSignAndDeleteUser() {
+    func reauthenticateAndDeleteUser() {
         Task {
             do {
                 try await userAuth.reauthenticate()
                 try await userAuth.deleteUser()
             } catch {
-                showAlert(error: error)
+                showError(error: error)
             }
         }
     }
@@ -123,23 +114,23 @@ struct ProfileView: View {
             do {
                 try await userAuth.signOut()
             } catch {
-                showAlert(error: error)
+                showError(error: error)
             }
         }
     }
     
     @MainActor
-    func showAlert(error: Error) {
-        if (error as NSError).code == 17014 {
-            typeAlert = .errorDeletingUser
-            self.messageError = "You need to login again"
-            self.titleError = "Are you sure to delete the user?"
-        } else {
-            typeAlert = .errorOther
-            self.messageError = ""
-            self.titleError = error.localizedDescription
+    func showError(error: Error) {
+        guard let error = error as NSError? else {
+            fatalError("Unknown error")
         }
-        self.showAlert.toggle()
+        switch error.code {
+        case ERROR_REQUIRES_RECENT_LOGIN:
+            self.isShowingDeleteUserDialog.toggle()
+        default:
+            self.error = ProfileViewError.unknownError(error: error)
+            self.showError.toggle()
+        }
     }
 }
 

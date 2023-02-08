@@ -45,6 +45,7 @@
 		E98F226D298D71000074C059 /* UserImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImage.swift; sourceTree = "<group>"; };
 		E98F226F2992E09F0074C059 /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
 		E98F22762992E1C00074C059 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E98F227D2993F8940074C059 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E9A677472979E6A8009CF826 /* ProjectForLearning.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ProjectForLearning.entitlements; sourceTree = "<group>"; };
 		E9A6774D297B02FF009CF826 /* MainTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarView.swift; sourceTree = "<group>"; };
 		E9A6774F297B0314009CF826 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -283,6 +284,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				E98F22762992E1C00074C059 /* ru */,
+				E98F227D2993F8940074C059 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
