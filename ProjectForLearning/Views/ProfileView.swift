@@ -24,7 +24,6 @@ struct ProfileView: View {
     @State private var isShowingDeleteUserDialog = false
     @State private var showError = false
     @State private var error: ProfileViewError? = .unknownError(error: NSError(domain: "Test", code: 1) as Error)
-    let ERROR_REQUIRES_RECENT_LOGIN = 17014
     
     var body: some View {
         ZStack {
@@ -66,15 +65,19 @@ struct ProfileView: View {
                         .padding()
                 }
                 .actionSheet(isPresented: $isShowingActionSheet) {
-                    ActionSheet(title: Text("Confirm your actions"),
-                                message: Text("Are you su re you want to log out of your profile?"),
-                                buttons: [.default(Text("Delete account"),
-                                                   action: {
-                        deleteUser()
-                    }),.destructive(Text("Sign out"),action: {
-                        signOut()
-                    })
-                                          ,.cancel()])
+                    ActionSheet(
+                        title: Text("Confirm your actions"),
+                        message: Text("Are you su re you want to log out of your profile?"),
+                        buttons: [
+                            .default(Text("Delete account")) {
+                                deleteUser()
+                            },
+                            .destructive(Text("Sign out")) {
+                                signOut()
+                            },
+                            .cancel()
+                        ]
+                    )
                 }
             }
             .alert(isPresented: $showError, error: error, actions: {})
@@ -82,7 +85,7 @@ struct ProfileView: View {
                 Button("Delete", role: .destructive) {
                     reauthenticateAndDeleteUser()
                 }
-                Button("No", role: .cancel) {
+                Button("Cancel", role: .cancel) {
                     isShowingDeleteUserDialog = false
                 }
             })
@@ -124,10 +127,10 @@ struct ProfileView: View {
         guard let error = error as NSError? else {
             fatalError("Unknown error")
         }
-        switch error.code {
-        case ERROR_REQUIRES_RECENT_LOGIN:
+        let code = AuthErrorCode(_nsError: error).code
+        if code == .requiresRecentLogin {
             self.isShowingDeleteUserDialog.toggle()
-        default:
+        } else {
             self.error = ProfileViewError.unknownError(error: error)
             self.showError.toggle()
         }
