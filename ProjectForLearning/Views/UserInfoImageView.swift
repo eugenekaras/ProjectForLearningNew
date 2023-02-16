@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UserImage: View {
+struct UserInfoImageView: View {
     let url: URL?
     
     var body: some View {
@@ -29,6 +29,6 @@ struct UserImage: View {
 
 struct NetworkImage_Previews: PreviewProvider {
     static var previews: some View {
-        UserImage(url: nil)
+        UserInfoImageView(url: nil)
     }
 }

@@ -15,34 +15,18 @@ struct SignInView: View {
     @State private var showError = false
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .center, spacing: 0) {
-                LoginHeader()
-                    .padding(100)
-                
-                Spacer()
-                
-                GoogleSignInButton{
-                    signIn()
-                }
-                .padding(20)
-                
-                Button {
-                    signInAnonymously()
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text("Use anonymous account")
-                            .foregroundColor(.white)
-                        Spacer()
-                    }
-                }
-                .frame(height: 40)
-                .background(.black)
-                .padding()
-                
-                Spacer()
-            }
+        VStack {
+            Spacer()
+            
+            headerView
+            
+            Spacer()
+            
+            googleSignInButtonView
+            
+            signInAnonymouslyButtonView
+            
+            Spacer()
         }
         .alert(
             messageError,
@@ -52,6 +36,41 @@ struct SignInView: View {
         }
     }
     
+    private var headerView:  some View {
+        VStack {
+            Image(systemName: "bonjour")
+                .font(.system(size: 120))
+                .foregroundColor(.purple)
+                .padding()
+            Text("Study App")
+                .font(.system(size: 18))
+                .foregroundColor(.black.opacity(0.80))
+        }
+    }
+    
+    private var googleSignInButtonView:  some View {
+        GoogleSignInButton{
+            signIn()
+        }
+        .padding()
+    }
+    
+    private var signInAnonymouslyButtonView:  some View {
+        Button {
+            signInAnonymously()
+        } label: {
+            HStack {
+                Spacer()
+                Text("Use anonymous account")
+                    .foregroundColor(.white)
+                Spacer()
+            }
+        }
+        .frame(height: 40)
+        .background(.black)
+        .padding()
+    }
+
     func signIn() {
         Task {
             do {

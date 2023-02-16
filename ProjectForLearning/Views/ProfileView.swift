@@ -21,32 +21,15 @@ enum ProfileViewError: LocalizedError {
 
 struct ProfileView: View {
     @EnvironmentObject var userAuth: UserAuth
-    
+
     @State private var showSignOutActionSheet = false
     @State private var showDialogForUserDelete = false
     @State private var showError = false
     @State private var error: ProfileViewError?
-    
+
     var body: some View {
         VStack {
-            HStack {
-                UserImage(url: userAuth.user?.url)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100, alignment: .center)
-                    .cornerRadius(8)
-                VStack(alignment: .leading) {
-                    Text(userAuth.user?.displayName ?? "Anonymous")
-                        .font(.headline)
-                    
-                    Text(userAuth.user?.email ?? "")
-                        .font(.subheadline)
-                }
-                Spacer()
-            }
-            .frame(maxWidth: .infinity)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(12)
-            .padding()
+            userInfoView
             
             Spacer()
             
@@ -54,17 +37,7 @@ struct ProfileView: View {
             
             Spacer()
             
-            Button  {
-                self.showSignOutActionSheet = true
-            } label: {
-                Text("Sign out")
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.systemIndigo))
-                    .cornerRadius(13)
-                    .padding()
-            }
+            signOutButtonView
         }
         .actionSheet(isPresented: $showSignOutActionSheet) {
             signOutActionSheet
@@ -79,7 +52,42 @@ struct ProfileView: View {
             }
         })
     }
+
+    private var userInfoView:  some View {
+        HStack{
+            UserInfoImageView(url: userAuth.user?.url)
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 100, height: 100, alignment: .center)
+                .cornerRadius(8)
+            VStack(alignment: .leading) {
+                Text(userAuth.user?.displayName ?? "Anonymous")
+                    .font(.headline)
+                
+                Text(userAuth.user?.email ?? "")
+                    .font(.subheadline)
+            }
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+        .padding()
+    }
     
+    private var signOutButtonView: some View {
+        Button  {
+            self.showSignOutActionSheet = true
+        } label: {
+            Text("Sign out")
+                .foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemIndigo))
+                .cornerRadius(13)
+                .padding()
+        }
+    }
+
     var signOutActionSheet: ActionSheet {
         ActionSheet(
             title: Text("Confirm your actions"),
@@ -105,6 +113,7 @@ struct ProfileView: View {
             }
         }
     }
+
     func reauthenticateAndDeleteUser() {
         Task {
             do {
@@ -115,7 +124,7 @@ struct ProfileView: View {
             }
         }
     }
-    
+
     func signOut() {
         Task {
             do {
@@ -125,7 +134,7 @@ struct ProfileView: View {
             }
         }
     }
-    
+
     @MainActor
     func showError(error: Error) {
         guard let error = error as NSError? else {
