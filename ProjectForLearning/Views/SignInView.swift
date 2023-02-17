@@ -28,12 +28,7 @@ struct SignInView: View {
             
             Spacer()
         }
-        .alert(
-            messageError,
-            isPresented: $showError
-        ) {
-            Button("Ok") { }
-        }
+        .alert(messageError, isPresented: $showError) { Button("Ok") { } }
     }
     
     private var headerView:  some View {

@@ -24,17 +24,23 @@ class UserAuth: ObservableObject {
     @Published var state: SignInState = .unknown
     
     @MainActor
-    func checkUser() {
+    func checkUser() async throws {
         guard let user = Auth.auth().currentUser else {
             self.user = nil
             self.state = .signedOut
             return
         }
-        self.user = User(
-            userId: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            url: user.photoURL)
+        if let restoredUser = try await User(userId: user.uid) {
+            self.user = restoredUser
+        } else {
+            self.user = User(
+                userId: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                phoneNumber: user.phoneNumber,
+                url: user.photoURL)
+            try await self.user?.saveUserData()
+        }
         self.state = .signedIn
     }
     
@@ -63,13 +69,13 @@ class UserAuth: ObservableObject {
     
     func signInAnonymously() async throws {
         try await Auth.auth().signInAnonymously()
-        await checkUser()
+        try await checkUser()
     }
     
     func signIn() async throws {
         let credential = try await getCredential()
         try await Auth.auth().signIn(with: credential)
-        await checkUser()
+        try await checkUser()
     }
     
     func reauthenticate() async throws {
@@ -83,7 +89,7 @@ class UserAuth: ObservableObject {
     func signOut() async throws {
         let firebaseAuth = Auth.auth()
         try firebaseAuth.signOut()
-        await checkUser()
+        try await checkUser()
     }
     
     func deleteUser() async throws {
@@ -91,7 +97,7 @@ class UserAuth: ObservableObject {
             fatalError("Error getting current user for delete")
         }
         try await user.delete()
-        await checkUser()
+        try await checkUser()
     }
 }
 
