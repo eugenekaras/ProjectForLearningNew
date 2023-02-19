@@ -5,43 +5,59 @@
   Created by Евгений Карась on 7.02.23.
   
 */
+// MARK: general strings
+"cancel" = "Отмена";
+"delete" = "Удалить";
+"save" = "Сохранить";
+"ok" = "Хорошо";
+"sign_out"  = "Выход";
+"unknown_error" = "Неизвестная ошибка";
+"confirm_actions" = "Подтвердите свои действия";
+"delete_account" = "Удалить аккаунт";
+"back" = "Назад";
+"done" = "Готово";
 
 // MARK: MainTabBarView
-"Some View" = "Некоторый экран";
-"Main" = "Главный экран";
-"Profile" = "Профиль";
+"some_view" = "Некоторый экран";
+"main_view" = "Главный экран";
+"profile_view" = "Профиль";
+
 // MARK: MainView
-"Hello, from Main View!" = "Привет из главного экрана";
+"greeting_main_view" = "Привет из главного экрана";
 
 // MARK: ProfileView
-"%@Anonymous" = "%@Анонимный пользователь";
-"Hello, from Profile!" = "Привет из профиля";
-"Sign out"  = "Выход";
-"Confirm your actions" = "Подтвердите свои действия";
-"Are you su re you want to log out of your profile?" = "Вы уверены, что хотите выйти из своего профиля?";
-"Delete account" = "Удалить аккаунт";
-"Cancel" = "Отмена";
-"Delete" = "Удалить";
-"Ok" = "Хорошо";
-"You need to login again" = "Вам нужно снова войти в аккаунт google";
-"Are you sure to delete the user?" = "Вы уверены, что хотите удалить пользователя?";
+"greeting_profile_view" = "Привет из профиля";
+"question_profile_view_delete_account" = "Вы уверены, что хотите удалить аккаунт?";
+"question_profile_view_logout_profile" = "Вы уверены, что хотите выйти из профиля?";
 
 // MARK: SomeView
-"Hello, from Some View!" = "Привет, с некоторого экрана!";
+"greeting_some_view" = "Привет, с некоторого экрана!";
 
 // MARK: SplashScreenView
-"Study App" = "Учебное приложение";
+"greeting_splash_screen_view" = "Учебное приложение";
 
 // MARK: GreetingPageView
-"Welcome" = "Добро пожаловать";
+"greeting_getting_page_view" = "Добро пожаловать";
 
 // MARK: SignInView
-"Use anonymous account" = "Использовать анонимный аккаунт";
+"sign_in_anonymously_button" = "Использовать анонимный аккаунт";
+"greeting_sign_in_view" = "Учебное приложение";
 
 // MARK: UserAuth
-"Firebase SDK is not integrated properly" = "Firebase SDK не интегрирован должным образом";
-"Error getting UIWindowScene" = "Ошибка получения UIWindowScene";
-"Error getting rootViewController" = "Ошибка получения rootViewController";
-"Error getting idToken" = "Ошибка получения idToken";
-"Error re-authenticate a user" = "Ошибка повторной аутентификации пользователя";
-"Error getting current user for delete" = "Ошибка получения текущего пользователя для удаления";
+"fatal_error_sdk_is_not_integrated" = "Firebase SDK не интегрирован должным образом";
+"fatal_error_is_not_get_window_scene" = "Ошибка получения UIWindowScene";
+"fatal_error_is_not_get_view_controller" = "Ошибка получения rootViewController";
+"fatal_error_is_not_get_id_token" = "Ошибка получения idToken";
+"fatal_error_re_authenticate_user" = "Ошибка повторной аутентификации пользователя";
+"fatal_error_is_not_get_current_user" = "Ошибка получения текущего пользователя для удаления";
+
+// MARK: EditUserInfoView
+"question_user_info_save_data" = "Вы уверены что хотите сохранить данных?";
+"edit_foto" = "Мое фото";
+"camera" = "Камера";
+"photo_library" = "Медеотека";
+"first_name" = "Имя";
+"last_name" = "Фамилия";
+"email" = "эл.почта";
+"phone" = "Телефон";
+"bio" = "ФИО";

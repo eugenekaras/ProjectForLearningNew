@@ -11,7 +11,7 @@ struct GreetingPageView: View {
     var body: some View {
         VStack{
             VStack{
-                Text("Welcome")
+                Text("greeting_getting_page_view")
                     .font(.system(size: 38))
                     .foregroundColor(.black.opacity(0.80))
             }

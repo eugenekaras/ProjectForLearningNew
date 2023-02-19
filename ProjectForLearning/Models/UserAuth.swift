@@ -47,22 +47,22 @@ class UserAuth: ObservableObject {
     @MainActor
     private func getCredential() async throws -> AuthCredential {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
-            fatalError("Firebase SDK is not integrated properly")
+            fatalError("fatal_error_sdk_is_not_integrated")
         }
         let configuration = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = configuration
         
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
-            fatalError("Error getting UIWindowScene")
+            fatalError("fatal_error_is_not_get_window_scene")
         }
         guard let rootViewController = windowScene.windows.first?.rootViewController else {
-            fatalError("Error getting rootViewController")
+            fatalError("fatal_error_is_not_get_view_controller")
         }
         let signResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
         
         let accessToken = signResult.user.accessToken
         guard let idToken = signResult.user.idToken else {
-            fatalError("Error getting idToken")
+            fatalError("fatal_error_is_not_get_id_token")
         }
         return GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
     }
@@ -80,7 +80,7 @@ class UserAuth: ObservableObject {
     
     func reauthenticate() async throws {
         guard let user = Auth.auth().currentUser else {
-            fatalError("Error re-authenticate a user")
+            fatalError("fatal_error_re_authenticate_user")
         }
         let credential = try await getCredential()
         try await user.reauthenticate(with: credential)
@@ -94,7 +94,7 @@ class UserAuth: ObservableObject {
     
     func deleteUser() async throws {
         guard let user = Auth.auth().currentUser else {
-            fatalError("Error getting current user for delete")
+            fatalError("fatal_error_is_not_get_current_user")
         }
         try await user.delete()
         try await checkUser()

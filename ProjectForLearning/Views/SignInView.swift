@@ -39,7 +39,7 @@ struct SignInView: View {
             
             Spacer()
         }
-        .alert(isPresented: $showError, error: error) { Button("Ok") { } }
+        .alert(isPresented: $showError, error: error) { Button("ok") { } }
     }
     
     private var headerView:  some View {
@@ -48,7 +48,7 @@ struct SignInView: View {
                 .font(.system(size: 120))
                 .foregroundColor(.purple)
                 .padding()
-            Text("Study App")
+            Text("greeting_sign_in_view")
                 .font(.system(size: 18))
                 .foregroundColor(.black.opacity(0.80))
         }
@@ -67,7 +67,7 @@ struct SignInView: View {
         } label: {
             HStack {
                 Spacer()
-                Text("Use anonymous account")
+                Text("sign_in_anonymously_button")
                     .foregroundColor(.white)
                 Spacer()
             }
@@ -101,7 +101,7 @@ struct SignInView: View {
     @MainActor
     func showError(error: Error) {
         guard let error = error as NSError? else {
-            fatalError("Unknown error")
+            fatalError("unknown_error")
         }
         self.error = SignInError.unknownError(error: error)
         self.showError.toggle()

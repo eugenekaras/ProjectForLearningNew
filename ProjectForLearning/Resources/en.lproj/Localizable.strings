@@ -31,35 +31,33 @@
 "question_profile_view_logout_profile" = "Are you su re you want to log out of your profile?";
 
 // MARK: SomeView
-"Hello, from Some View!" = "Hello, from Some View!";
+"greeting_some_view" = "Hello, from Some View!";
 
 // MARK: SplashScreenView
-"Study App" = "Study App";
+"greeting_splash_screen_view" = "Study App";
 
 // MARK: GreetingPageView
-"Welcome" = "Welcome";
+"greeting_getting_page_view" = "Welcome";
 
 // MARK: SignInView
-"Use anonymous account" = "Use anonymous account";
+"sign_in_anonymously_button" = "Use anonymous account";
+"greeting_sign_in_view" = "Study App";
 
 // MARK: UserAuth
-"Firebase SDK is not integrated properly" = "Firebase SDK is not integrated properly";
-"Error getting UIWindowScene" = "Error getting UIWindowScene";
-"Error getting rootViewController" = "Error getting rootViewController";
-"Error getting idToken" = "Error getting idToken";
-"Error re-authenticate a user" = "Error re-authenticate a user";
-"Error getting current user for delete" = "Error getting current user for delete";
-
-// MARK: UserAuth
-"Firebase SDK is not integrated properly" = "Firebase SDK is not integrated properly";
-"Error getting UIWindowScene" = "Error getting UIWindowScene";
-"Error getting rootViewController" = "Error getting rootViewController";
-"Error getting idToken" = "Error getting idToken";
-"Error re-authenticate a user" = "Error re-authenticate a user";
-"Error getting current user for delete" = "Error getting current user for delete";
+"fatal_error_sdk_is_not_integrated" = "Firebase SDK is not integrated properly";
+"fatal_error_is_not_get_window_scene" = "Error getting UIWindowScene";
+"fatal_error_is_not_get_view_controller" = "Error getting rootViewController";
+"fatal_error_is_not_get_id_token" = "Error getting idToken";
+"fatal_error_re_authenticate_user" = "Error re-authenticate a user";
+"fatal_error_is_not_get_current_user" = "Error getting current user for delete";
 
 // MARK: EditUserInfoView
 "question_user_info_save_data" = "You are sure to save data?";
 "edit_foto" = "My foto";
 "camera" = "Camera";
 "photo_library" = "Photo Library";
+"first_name" = "First name";
+"last_name" = "Last name";
+"email" = "Email";
+"phone" = "Phone";
+"bio" = "Bio";

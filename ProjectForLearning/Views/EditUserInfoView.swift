@@ -75,7 +75,7 @@ struct EditUserInfoView: View {
     }
     
     private var editUserInfoImageView: some View {
-        Section(header: Text("My foto")) {
+        Section(header: Text("edit_foto")) {
             ZStack(alignment: .topTrailing){
                 HStack{
                     UserInfoImageView(user: tmpUser)
@@ -129,21 +129,21 @@ struct EditUserInfoView: View {
     
     private var editUserInfoView: some View {
         Group{
-            Section(header: Text("First name")) {
-                TextField("first name",text: $tmpUser.firstName)
+            Section(header: Text("first_name")) {
+                TextField("first_name",text: $tmpUser.firstName)
             }
-            Section(header: Text("Last name")) {
-                TextField("Last name",text: $tmpUser.lastName)
+            Section(header: Text("last_name")) {
+                TextField("last_name",text: $tmpUser.lastName)
             }
-            Section(header: Text("Email")) {
-                TextField("Email",text: $tmpUser.email)
+            Section(header: Text("email")) {
+                TextField("email",text: $tmpUser.email)
                     .keyboardType(.emailAddress)
             }
-            Section(header: Text("Phone")) {
-                TextField("Phone",text: $tmpUser.phoneNumber)
+            Section(header: Text("phone")) {
+                TextField("phone",text: $tmpUser.phoneNumber)
                     .keyboardType(.phonePad)
             }
-            Section(header: Text("Bio")) {
+            Section(header: Text("bio")) {
                 TextEditor(text: $tmpUser.bio)
                     .multilineTextAlignment(.leading)
                     .disableAutocorrection(true)
@@ -167,7 +167,7 @@ struct EditUserInfoView: View {
     @MainActor
     func showError(error: Error) {
         guard let error = error as NSError? else {
-            fatalError("Unknown error")
+            fatalError("unknown_error")
         }
         self.error = EditUserInfoError.unknownError(error: error)
         self.showError.toggle()

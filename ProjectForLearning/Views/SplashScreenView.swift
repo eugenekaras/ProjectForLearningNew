@@ -14,7 +14,7 @@ struct SplashScreenView: View {
                 Image(systemName: "swift")
                     .font(.system(size: 80))
                     .foregroundColor(.purple)
-                Text("Study App")
+                Text("greeting_splash_screen_view")
                     .font(.system(size: 23))
                     .foregroundColor(.black.opacity(0.80))
             }
