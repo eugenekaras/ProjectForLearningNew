@@ -14,15 +14,15 @@ struct MainTabBarView: View {
         TabView(selection: $selectedTab) {
             SomeView()
                 .tabItem {
-                    Label("Some View", systemImage: "square.dashed")
+                    Label("some_view", systemImage: "square.dashed")
                 }.tag(0)
             MainView()
                 .tabItem {
-                    Label("Main", systemImage: "app")
+                    Label("main_view", systemImage: "app")
                 }.tag(1)
             ProfileView()
                 .tabItem {
-                    Label("Profile", systemImage: "person.fill")
+                    Label("profile_view", systemImage: "person.fill")
                 }.tag(2)
         }
     }

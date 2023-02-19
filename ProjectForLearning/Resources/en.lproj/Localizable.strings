@@ -5,26 +5,30 @@
   Created by Евгений Карась on 7.02.23.
   
 */
+// MARK: general strings
+"cancel" = "Cancel";
+"delete" = "Delete";
+"save" = "Save";
+"ok" = "Ok";
+"sign_out"  = "Sign out";
+"unknown_error" = "Unknown error";
+"confirm_actions" = "Confirm your actions";
+"delete_account" = "Delete account";
+"back" = "Back";
+"done" = "Done";
 
 // MARK: MainTabBarView
-"Some View" = "Some View";
-"Main" = "Main";
-"Profile" = "Profile";
+"some_view" = "Some View";
+"main_view" = "Main";
+"profile_view" = "Profile";
+
 // MARK: MainView
-"Hello, from Main View!" = "Hello, from Main View!";
+"greeting_main_view" = "Hello, from Main View!";
 
 // MARK: ProfileView
-"%@Anonymous" = "%@Anonymous";
-"Hello, from Profile!" = "Hello, from Profile!";
-"Sign out"  = "Sign out";
-"Confirm your actions" = "Confirm your actions";
-"Are you su re you want to log out of your profile?" = "Are you su re you want to log out of your profile?";
-"Delete account" = "Delete account";
-"Cancel" = "Cancel";
-"Delete" = "Delete";
-"Ok" = "Ok";
-"You need to login again" = "You need to login again";
-"Are you sure to delete the user?" = "Are you sure to delete the user?";
+"greeting_profile_view" = "Hello, from Profile!";
+"question_profile_view_delete_account" = "Are you sure you want to delete your account?";
+"question_profile_view_logout_profile" = "Are you su re you want to log out of your profile?";
 
 // MARK: SomeView
 "Hello, from Some View!" = "Hello, from Some View!";
@@ -45,3 +49,17 @@
 "Error getting idToken" = "Error getting idToken";
 "Error re-authenticate a user" = "Error re-authenticate a user";
 "Error getting current user for delete" = "Error getting current user for delete";
+
+// MARK: UserAuth
+"Firebase SDK is not integrated properly" = "Firebase SDK is not integrated properly";
+"Error getting UIWindowScene" = "Error getting UIWindowScene";
+"Error getting rootViewController" = "Error getting rootViewController";
+"Error getting idToken" = "Error getting idToken";
+"Error re-authenticate a user" = "Error re-authenticate a user";
+"Error getting current user for delete" = "Error getting current user for delete";
+
+// MARK: EditUserInfoView
+"question_user_info_save_data" = "You are sure to save data?";
+"edit_foto" = "My foto";
+"camera" = "Camera";
+"photo_library" = "Photo Library";

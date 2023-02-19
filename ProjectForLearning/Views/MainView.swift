@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     var body: some View {
-        Text("Hello, from Main View!")
+        Text("greeting_main_view!")
     }
 }
 

@@ -14,8 +14,11 @@ struct User: Codable {
     var lastName: String = ""
     var email: String = ""
     var phoneNumber: String = ""
+    var bio: String = ""
     var url: URL?
     var imageData: Data?
+    
+    static var userDefault: User = User(userId: "12345", email: "", displayName: "", phoneNumber: "", url: nil)
     
     var image: UIImage? {
         get {
@@ -44,11 +47,6 @@ struct User: Codable {
                 }
             }
         }
-    }
-
-    private var urlImage: URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0].appendingPathComponent("\(userId).jpg")
     }
     
     init(userId: String, email: String?, displayName: String?, phoneNumber: String?, url: URL?) {

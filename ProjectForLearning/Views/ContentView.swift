@@ -7,6 +7,17 @@
 
 import SwiftUI
 
+enum ContentViewError: LocalizedError {
+    case unknownError(error: Error)
+    
+    var errorDescription: String? {
+        switch self {
+        case .unknownError(let error):
+            return error.localizedDescription
+        }
+    }
+}
+
 enum ContentViewState {
     case splash
     case greeting
@@ -18,6 +29,8 @@ struct ContentView: View {
     @EnvironmentObject var userAuth: UserAuth
     
     @State private var contentViewState = ContentViewState.splash
+    @State private var showError = false
+    @State private var error: ContentViewError?
     
     var body: some View {
         Group {
@@ -30,7 +43,7 @@ struct ContentView: View {
         }
         .animation(.default, value: self.contentViewState)
         .task {
-            userAuth.checkUser()
+            checkUser()
         }
         .onChange(of: userAuth.state) { newValue in
             updateViewState(with: newValue)
@@ -51,6 +64,25 @@ struct ContentView: View {
             case .signedOut: self.contentViewState = .signOut
             }
         }
+    }
+    
+    func checkUser() {
+          Task {
+              do {
+                  try await userAuth.checkUser()
+              } catch {
+                  showError(error: error)
+              }
+          }
+      }
+    
+    @MainActor
+    func showError(error: Error) {
+        guard let error = error as NSError? else {
+            fatalError("unknown_error")
+        }
+        self.error = ContentViewError.unknownError(error: error)
+        self.showError.toggle()
     }
 }
 

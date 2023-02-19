@@ -8,11 +8,22 @@
 import SwiftUI
 import GoogleSignInSwift
 
+enum SignInError: LocalizedError {
+    case unknownError(error: Error)
+    
+    var errorDescription: String? {
+        switch self {
+        case .unknownError(let error):
+            return error.localizedDescription
+        }
+    }
+}
+
 struct SignInView: View {
     @EnvironmentObject var userAuth: UserAuth
     
-    @State private var messageError = ""
     @State private var showError = false
+    @State private var error: SignInError?
     
     var body: some View {
         VStack {
@@ -28,7 +39,7 @@ struct SignInView: View {
             
             Spacer()
         }
-        .alert(messageError, isPresented: $showError) { Button("Ok") { } }
+        .alert(isPresented: $showError, error: error) { Button("Ok") { } }
     }
     
     private var headerView:  some View {
@@ -89,7 +100,10 @@ struct SignInView: View {
     
     @MainActor
     func showError(error: Error) {
-        self.messageError = error.localizedDescription
+        guard let error = error as NSError? else {
+            fatalError("Unknown error")
+        }
+        self.error = SignInError.unknownError(error: error)
         self.showError.toggle()
     }
 }
