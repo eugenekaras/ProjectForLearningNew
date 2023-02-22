@@ -20,13 +20,13 @@ class UserAuth: ObservableObject {
         case signedOut
     }
     
-    @Published var user: User?
+    @Published var user: User = .emptyUser
     @Published var state: SignInState = .unknown
     
     @MainActor
     func checkUser() async throws {
         guard let user = Auth.auth().currentUser else {
-            self.user = nil
+            self.user = .emptyUser
             self.state = .signedOut
             return
         }
@@ -39,7 +39,7 @@ class UserAuth: ObservableObject {
                 displayName: user.displayName,
                 phoneNumber: user.phoneNumber,
                 url: user.photoURL)
-            try await self.user?.saveUserData()
+            try await self.user.saveUserData()
         }
         self.state = .signedIn
     }
@@ -99,5 +99,6 @@ class UserAuth: ObservableObject {
         try await user.delete()
         try await checkUser()
     }
+    
 }
 

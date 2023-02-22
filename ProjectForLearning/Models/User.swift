@@ -8,8 +8,12 @@
 import SwiftUI
 import FirebaseAuth
 
+extension User {
+    static var emptyUser = User()
+}
+
 struct User: Codable {
-    var userId: String
+    var userId: String = UUID().uuidString
     var firstName: String = ""
     var lastName: String = ""
     var email: String = ""
@@ -18,8 +22,10 @@ struct User: Codable {
     var url: URL?
     var imageData: Data?
     
-    static var userDefault: User = User(userId: "12345", email: "", displayName: "", phoneNumber: "", url: nil)
-    
+    var isEmptyUser: Bool {
+        self.userId == Self.emptyUser.userId
+    }
+        
     var image: UIImage? {
         get {
             if let imageData = imageData {
@@ -47,6 +53,10 @@ struct User: Codable {
                 }
             }
         }
+    }
+    
+    init() {
+        
     }
     
     init(userId: String, email: String?, displayName: String?, phoneNumber: String?, url: URL?) {

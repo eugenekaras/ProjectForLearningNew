@@ -20,7 +20,9 @@ enum ProfileViewError: LocalizedError {
 }
 
 struct ProfileView: View {
-    @EnvironmentObject var userAuth: UserAuth
+    @EnvironmentObject private var appState: AppState
+    
+    @Binding var user: User
     
     @State private var showSignOutActionSheet = false
     @State private var showDialogForUserDelete = false
@@ -44,47 +46,39 @@ struct ProfileView: View {
     }
     
     private var userInfoView:  some View {
-        Group{
-            let binding = Binding(
-                get: { self.userAuth.user },
-                set: { self.userAuth.user = $0 }
-            )
-            ZStack(alignment: .topTrailing){
-                HStack{
-                    UserInfoImageView(user: userAuth.user)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100, alignment: .center)
-                        .cornerRadius(8)
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text(userAuth.user?.displayName ?? "Anonymous")
-                            .font(.headline)
-                        
-                        Text(userAuth.user?.email ?? "")
-                            .font(.subheadline)
-                        
-                        Text(userAuth.user?.phoneNumber ?? "")
-                            .font(.subheadline)
-                        
-                        Text(userAuth.user?.bio ?? "")
-                            .font(.footnote)
-                            .lineLimit(2)
-                            .multilineTextAlignment(.leading)
-                    }
-                    Spacer()
+        ZStack(alignment: .topTrailing) {
+            HStack{
+                UserInfoImageView(user: user)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100, alignment: .center)
+                    .cornerRadius(8)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(user.firstName)
+                        .font(.headline)
+                    
+                    Text(user.email)
+                        .font(.subheadline)
+                    
+                    Text(user.phoneNumber)
+                        .font(.subheadline)
+                    
+                    Text(user.bio)
+                        .font(.footnote)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                 }
-                .frame(maxWidth: .infinity)
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
-                
-                buttonShowEditUserInfoView
+                Spacer()
             }
-            .sheet(isPresented: $showingEditUserInfoView) {
-                EditUserInfoView(user: binding) {
-                    showingEditUserInfoView = false
-                }
-            }
+            .frame(maxWidth: .infinity)
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(12)
+            
+            buttonShowEditUserInfoView
         }
         .padding()
+        .sheet(isPresented: $showingEditUserInfoView) {
+            EditUserInfoView(user: $user)
+        }
     }
     
     private var buttonShowEditUserInfoView: some View {
@@ -146,7 +140,7 @@ struct ProfileView: View {
     func deleteUser() {
         Task {
             do {
-                try await userAuth.deleteUser()
+                try await appState.userAuth.deleteUser()
             } catch {
                 showError(error: error)
             }
@@ -156,8 +150,8 @@ struct ProfileView: View {
     func reauthenticateAndDeleteUser() {
         Task {
             do {
-                try await userAuth.reauthenticate()
-                try await userAuth.deleteUser()
+                try await appState.userAuth.reauthenticate()
+                try await appState.userAuth.deleteUser()
             } catch {
                 showError(error: error)
             }
@@ -167,7 +161,7 @@ struct ProfileView: View {
     func signOut() {
         Task {
             do {
-                try await userAuth.signOut()
+                try await appState.userAuth.signOut()
             } catch {
                 showError(error: error)
             }
@@ -193,7 +187,7 @@ struct ProfileView_Previews: PreviewProvider {
     static var userAuth = UserAuth()
     
     static var previews: some View {
-        ProfileView()
+        ProfileView(user: .constant(.emptyUser))
             .environmentObject(userAuth)
     }
 }

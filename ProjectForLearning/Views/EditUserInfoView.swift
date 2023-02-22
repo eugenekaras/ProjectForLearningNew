@@ -20,21 +20,25 @@ enum EditUserInfoError: LocalizedError {
 }
 
 struct EditUserInfoView: View {
+    @Environment(\.dismiss) var dismiss
     
     @State private var showError = false
     @State private var error: EditUserInfoError?
     @State private var image: UIImage?
-    @State private var tmpUser: User = User.userDefault
     @State private var showChangePhotoConfirmationDialog = false
     @State private var showPhotosPicker = false
     @State private var showCameraPicker = false
     @State private var selectPhotosPickerItem: PhotosPickerItem?
     @State private var showDialogForSaveUserInfoData = false
     
-    @Binding var user: User?
-    
-    var confirmation: () -> Void
-    
+    @Binding private var user: User
+    @State private var tmpUser: User
+
+    init(user: Binding<User>) {
+        self._user = user
+        self._tmpUser = State(wrappedValue: user.wrappedValue)
+    }
+        
     var body: some View {
         VStack{
             buttonView
@@ -46,16 +50,14 @@ struct EditUserInfoView: View {
         }
         .alert(isPresented: $showError, error: error, actions: {})
         .onAppear() {
-            if let user = user {
-                tmpUser = user
-            }
+            tmpUser = user
         }
     }
     
     private var buttonView: some View {
         HStack(){
             Button("back") {
-                confirmation()
+                dismiss()
             }
             Spacer()
             
@@ -65,10 +67,10 @@ struct EditUserInfoView: View {
             .confirmationDialog("question_user_info_save_data", isPresented: $showDialogForSaveUserInfoData, actions: {
                 Button("save", role: .destructive) {
                     saveChangeData()
-                    confirmation()
+                    dismiss()
                 }
                 Button("cancel", role: .cancel) {
-                    confirmation()
+                    dismiss()
                 }
             })
         }.padding()
@@ -157,7 +159,7 @@ struct EditUserInfoView: View {
         
         Task {
             do {
-                try await user?.saveUserData()
+                try await user.saveUserData()
             } catch {
                 await showError(error: error)
             }
@@ -176,8 +178,6 @@ struct EditUserInfoView: View {
 
 struct EditUserInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        EditUserInfoView(user: Binding(
-            get: { User.userDefault },
-            set: { User.userDefault = $0!})) { }
+        EditUserInfoView(user: .constant(.emptyUser))
     }
 }

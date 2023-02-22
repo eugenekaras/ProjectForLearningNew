@@ -20,7 +20,6 @@ struct ProjectForLearningApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
-                .environmentObject(appState.userAuth)
         }
     }
 }

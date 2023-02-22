@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct UserInfoImageView: View {
-    var user: User?
+    var user: User
     
     var body: some View {
-        if let image = user?.image {
+        if let image = user.image {
             Image(uiImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-        } else if let url = user?.url {
+        } else if let url = user.url {
             AsyncImage(url: url) { image in
                 image
                     .resizable()
@@ -33,6 +33,6 @@ struct UserInfoImageView: View {
 
 struct NetworkImage_Previews: PreviewProvider {
     static var previews: some View {
-        UserInfoImageView(user: User.userDefault)
+        UserInfoImageView(user: .emptyUser)
     }
 }

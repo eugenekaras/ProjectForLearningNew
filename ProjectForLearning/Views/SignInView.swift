@@ -20,7 +20,7 @@ enum SignInError: LocalizedError {
 }
 
 struct SignInView: View {
-    @EnvironmentObject var userAuth: UserAuth
+    @EnvironmentObject var appState: AppState
     
     @State private var showError = false
     @State private var error: SignInError?
@@ -80,8 +80,8 @@ struct SignInView: View {
     func signIn() {
         Task {
             do {
-                try await userAuth.signIn()
-                userAuth.state = .signedIn
+                try await appState.userAuth.signIn()
+                appState.userAuth.state = .signedIn
             } catch {
                 showError(error: error)
             }
@@ -91,7 +91,7 @@ struct SignInView: View {
     func signInAnonymously() {
         Task {
             do {
-                try await userAuth.signInAnonymously()
+                try await appState.userAuth.signInAnonymously()
             } catch {
                 showError(error: error)
             }

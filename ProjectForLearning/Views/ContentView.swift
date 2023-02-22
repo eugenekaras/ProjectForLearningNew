@@ -26,13 +26,15 @@ enum ContentViewState {
 }
 
 struct ContentView: View {
-    @EnvironmentObject var userAuth: UserAuth
+    @EnvironmentObject private var appState: AppState
     
     @State private var contentViewState = ContentViewState.splash
     @State private var showError = false
     @State private var error: ContentViewError?
     
     var body: some View {
+        let _ = Self._printChanges()
+
         Group {
             switch self.contentViewState {
             case .splash: SplashScreenView()
@@ -45,8 +47,8 @@ struct ContentView: View {
         .task {
             checkUser()
         }
-        .onChange(of: userAuth.state) { newValue in
-            updateViewState(with: newValue)
+        .onReceive(appState.userAuth.$state) { state in
+            updateViewState(with: state)
         }
     }
     
@@ -69,7 +71,7 @@ struct ContentView: View {
     func checkUser() {
           Task {
               do {
-                  try await userAuth.checkUser()
+                  try await appState.userAuth.checkUser()
               } catch {
                   showError(error: error)
               }

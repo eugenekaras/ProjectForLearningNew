@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MainTabBarView: View {
+    @EnvironmentObject private var appState: AppState
+
     @State private var selectedTab = 1
     
     var body: some View {
@@ -20,7 +22,7 @@ struct MainTabBarView: View {
                 .tabItem {
                     Label("main_view", systemImage: "app")
                 }.tag(1)
-            ProfileView()
+            ProfileView(user: $appState.userAuth.user)
                 .tabItem {
                     Label("profile_view", systemImage: "person.fill")
                 }.tag(2)
