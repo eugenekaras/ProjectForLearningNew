@@ -39,21 +39,21 @@ struct User: Codable {
         }
     }
     
-    var displayName: String? {
-        get {
-            return firstName.capitalized + " " + lastName.capitalized
-        }
-        set {
-            if let array = newValue?.components(separatedBy: " ") {
-                if array.count == 1 {
-                    firstName = array[0]
-                } else {
-                    firstName = array[0]
-                    lastName = array[1]
-                }
-            }
-        }
-    }
+//    var displayName: String? {
+//        get {
+//            return firstName.capitalized + " " + lastName.capitalized
+//        }
+//        set {
+//            if let array = newValue?.components(separatedBy: " ") {
+//                if array.count == 1 {
+//                    firstName = array[0]
+//                } else {
+//                    firstName = array[0]
+//                    lastName = array[1]
+//                }
+//            }
+//        }
+//    }
     
     init() {
         
@@ -61,31 +61,38 @@ struct User: Codable {
     
     init(userId: String, email: String?, displayName: String?, phoneNumber: String?, url: URL?) {
         self.userId = userId
-        if let email = email {
+        
+        if let email {
             self.email = email
         }
-        if let displayName = displayName {
-            self.displayName = displayName
+        
+        if let displayName {
+            let array = displayName.components(separatedBy: " ")
+            
+            if array.count == 1 {
+                firstName = array[0]
+            } else {
+                firstName = array[0]
+                lastName = array[1]
+            }
         }
+        
         if let phoneNumber = phoneNumber {
             self.phoneNumber = phoneNumber
         }
         self.url = url
     }
-    
-    init?(userId: String) async throws {
-        if let data = UserDefaults.standard.data(forKey: userId) {
-            if let user = try? JSONDecoder().decode(User.self, from: data) {
-                self = user
-                return
-            }
+        
+    static func restoreUser(userId: String) throws -> User? {
+        guard let data = UserDefaults.standard.data(forKey: userId) else {
+            return nil
         }
-        return nil
+        
+        return try JSONDecoder().decode(User.self, from: data)
     }
     
-    func saveUserData() async throws {
-        if let user = try? JSONEncoder().encode(self) {
-            UserDefaults.standard.set(user, forKey: userId)
-        }
+    func saveUserData() throws {
+        let user = try JSONEncoder().encode(self)
+        UserDefaults.standard.set(user, forKey: userId)
     }
 }

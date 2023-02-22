@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Factory
 
 enum ContentViewError: LocalizedError {
     case unknownError(error: Error)
@@ -28,6 +29,8 @@ enum ContentViewState {
 struct ContentView: View {
     @EnvironmentObject private var appState: AppState
     
+    @Injected(Container.authenticationService) private var authenticationService
+    
     @State private var contentViewState = ContentViewState.splash
     @State private var showError = false
     @State private var error: ContentViewError?
@@ -45,14 +48,14 @@ struct ContentView: View {
         }
         .animation(.default, value: self.contentViewState)
         .task {
-            checkUser()
+            getReady()
         }
-        .onReceive(appState.userAuth.$state) { state in
+        .onReceive(appState.userAuth.$userState) { state in
             updateViewState(with: state)
         }
     }
     
-    func updateViewState(with signInState: UserAuth.SignInState) {
+    func updateViewState(with signInState: UserAuth.UserState) {
         if (self.contentViewState == .signOut) && (signInState == .signedIn) {
             self.contentViewState = .greeting
             
@@ -68,10 +71,20 @@ struct ContentView: View {
         }
     }
     
-    func checkUser() {
+    func getReady() {
           Task {
               do {
-                  try await appState.userAuth.checkUser()
+                  let userState = try await authenticationService.userState()
+                  switch userState {
+                  case .signedIn(let userInfo):
+                      let user = try User.restoreUser(userId: userInfo.userID) ?? User(userId: userInfo.userID, email: userInfo.email, displayName: userInfo.displayName, phoneNumber: userInfo.phoneNumber, url: userInfo.photoURL)
+                      
+                      appState.userAuth.user = user
+                      
+                      appState.userAuth.userState = .signedIn
+                  case .signedOut:
+                      appState.userAuth.userState = .signedOut
+                  }
               } catch {
                   showError(error: error)
               }

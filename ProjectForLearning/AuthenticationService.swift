@@ -1,47 +1,51 @@
 //
-//  AuthenticationViewModel.swift
+//  AuthenticationService.swift
 //  ProjectForLearning
 //
-//  Created by Евгений Карась on 21.01.23.
+//  Created by Sergei Bogachev on 22/02/2023.
 //
 
-import SwiftUI
-import GoogleSignIn
-import GoogleSignInSwift
+import Foundation
 import Firebase
 import FirebaseAuth
-import Combine
+import GoogleSignIn
+import GoogleSignInSwift
 
-class UserAuth: ObservableObject {
+final class AuthenticationService {
+    
+    struct UserInfo {
+        let userID: String
+        let email: String?
+        let displayName: String?
+        let phoneNumber: String?
+        let photoURL: URL?
+    }
     
     enum UserState {
-        case unknown
-        case signedIn
+        case signedIn(UserInfo)
         case signedOut
     }
     
-    @Published var user: User = .emptyUser
-    @Published var userState: UserState = .unknown
+    init() {
         
-    @MainActor
-    func checkUser() async throws {
-//        guard let user = Auth.auth().currentUser else {
-//            self.user = .emptyUser
-//            self.state = .signedOut
-//            return
-//        }
-//        if let restoredUser = try await User(userId: user.uid) {
-//            self.user = restoredUser
-//        } else {
-//            self.user = User(
-//                userId: user.uid,
-//                email: user.email,
-//                displayName: user.displayName,
-//                phoneNumber: user.phoneNumber,
-//                url: user.photoURL)
-//            try await self.user.saveUserData()
-//        }
-//        self.state = .signedIn
+    }
+                
+    func userState() async throws -> UserState {
+        guard let user = Auth.auth().currentUser else {
+            return .signedOut
+        }
+        
+        try await user.reload()
+        
+        let userInfo = UserInfo(
+            userID: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            phoneNumber: user.phoneNumber,
+            photoURL: user.photoURL
+        )
+        
+        return .signedIn(userInfo)
     }
     
     @MainActor
@@ -67,15 +71,37 @@ class UserAuth: ObservableObject {
         return GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
     }
     
-    func signInAnonymously() async throws {
-        try await Auth.auth().signInAnonymously()
-        try await checkUser()
+    func signInAnonymously() async throws -> UserInfo {
+        let result = try await Auth.auth().signInAnonymously()
+        
+        let user = result.user
+        
+        let userInfo = UserInfo(
+            userID: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            phoneNumber: user.phoneNumber,
+            photoURL: user.photoURL
+        )
+
+        return userInfo
     }
     
-    func signIn() async throws {
+    func signIn() async throws -> UserInfo {
         let credential = try await getCredential()
-        try await Auth.auth().signIn(with: credential)
-        try await checkUser()
+        let result = try await Auth.auth().signIn(with: credential)
+
+        let user = result.user
+        
+        let userInfo = UserInfo(
+            userID: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            phoneNumber: user.phoneNumber,
+            photoURL: user.photoURL
+        )
+
+        return userInfo
     }
     
     func reauthenticate() async throws {
@@ -89,7 +115,6 @@ class UserAuth: ObservableObject {
     func signOut() async throws {
         let firebaseAuth = Auth.auth()
         try firebaseAuth.signOut()
-        try await checkUser()
     }
     
     func deleteUser() async throws {
@@ -97,8 +122,6 @@ class UserAuth: ObservableObject {
             fatalError("fatal_error_is_not_get_current_user")
         }
         try await user.delete()
-        try await checkUser()
     }
     
 }
-
