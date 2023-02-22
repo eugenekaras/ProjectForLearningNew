@@ -7,6 +7,7 @@
 
 import SwiftUI
 import GoogleSignInSwift
+import Factory
 
 enum SignInError: LocalizedError {
     case unknownError(error: Error)
@@ -21,6 +22,8 @@ enum SignInError: LocalizedError {
 
 struct SignInView: View {
     @EnvironmentObject var appState: AppState
+    
+    @Injected(Container.authenticationService) private var authenticationService
     
     @State private var showError = false
     @State private var error: SignInError?
@@ -80,8 +83,9 @@ struct SignInView: View {
     func signIn() {
         Task {
             do {
-                try await appState.userAuth.signIn()
-                appState.userAuth.userState = .signedIn
+                let userInfo = try await authenticationService.signIn()
+                
+                try setUserState(userInfo: userInfo)
             } catch {
                 showError(error: error)
             }
@@ -91,11 +95,23 @@ struct SignInView: View {
     func signInAnonymously() {
         Task {
             do {
-                try await appState.userAuth.signInAnonymously()
+                let userInfo = try await authenticationService.signInAnonymously()
+                
+                try setUserState(userInfo: userInfo)
             } catch {
                 showError(error: error)
             }
         }
+    }
+    
+    func setUserState(userInfo: AuthenticationService.UserInfo) throws {
+        let user = try User.restoreUser(userId: userInfo.userID) ?? User(userId: userInfo.userID, email: userInfo.email, displayName: userInfo.displayName, phoneNumber: userInfo.phoneNumber, url: userInfo.photoURL)
+        
+        try user.saveUserData()
+        
+        appState.userState.user = user
+        
+        appState.userState.state = .signedIn
     }
     
     @MainActor
@@ -109,7 +125,7 @@ struct SignInView: View {
 }
 
 struct SignInView_Previews: PreviewProvider {
-    static var userAuth = UserAuth()
+    static var userAuth = UserState()
     
     static var previews: some View {
         SignInView()

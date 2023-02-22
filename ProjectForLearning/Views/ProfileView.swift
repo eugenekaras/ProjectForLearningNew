@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import Factory
 
 enum ProfileViewError: LocalizedError {
     case unknownError(error: Error)
@@ -21,6 +22,7 @@ enum ProfileViewError: LocalizedError {
 
 struct ProfileView: View {
     @EnvironmentObject private var appState: AppState
+    @Injected(Container.authenticationService) private var authenticationService
     
     @Binding var user: User
     
@@ -53,7 +55,7 @@ struct ProfileView: View {
                     .frame(width: 100, height: 100, alignment: .center)
                     .cornerRadius(8)
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(user.firstName)
+                    Text(user.firstName + " " + user.lastName)
                         .font(.headline)
                     
                     Text(user.email)
@@ -133,14 +135,16 @@ struct ProfileView: View {
                     signOut()
                 },
                 .cancel()
-            ]
-        )
+            ])
     }
     
     func deleteUser() {
         Task {
             do {
-                try await appState.userAuth.deleteUser()
+                try await authenticationService.deleteUser()
+                
+                appState.userState.state = .signedOut
+                appState.userState.user = .emptyUser
             } catch {
                 showError(error: error)
             }
@@ -150,8 +154,11 @@ struct ProfileView: View {
     func reauthenticateAndDeleteUser() {
         Task {
             do {
-                try await appState.userAuth.reauthenticate()
-                try await appState.userAuth.deleteUser()
+                try await authenticationService.reauthenticate()
+                try await authenticationService.deleteUser()
+                
+                appState.userState.state = .signedOut
+                appState.userState.user = .emptyUser
             } catch {
                 showError(error: error)
             }
@@ -161,7 +168,10 @@ struct ProfileView: View {
     func signOut() {
         Task {
             do {
-                try await appState.userAuth.signOut()
+                try await authenticationService.signOut()
+                
+                appState.userState.state = .signedOut
+                appState.userState.user = .emptyUser
             } catch {
                 showError(error: error)
             }
@@ -184,7 +194,7 @@ struct ProfileView: View {
 }
 
 struct ProfileView_Previews: PreviewProvider {
-    static var userAuth = UserAuth()
+    static var userAuth = UserState()
     
     static var previews: some View {
         ProfileView(user: .constant(.emptyUser))

@@ -22,7 +22,7 @@ struct MainTabBarView: View {
                 .tabItem {
                     Label("main_view", systemImage: "app")
                 }.tag(1)
-            ProfileView(user: $appState.userAuth.user)
+            ProfileView(user: $appState.userState.user)
                 .tabItem {
                     Label("profile_view", systemImage: "person.fill")
                 }.tag(2)
@@ -31,10 +31,10 @@ struct MainTabBarView: View {
 }
 
 struct TabBarView_Previews: PreviewProvider {
-    static var userAuth = UserAuth()
+    static var userState = UserState()
     
     static var previews: some View {
         MainTabBarView()
-            .environmentObject(userAuth)
+            .environmentObject(userState)
     }
 }

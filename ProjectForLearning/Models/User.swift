@@ -39,22 +39,6 @@ struct User: Codable {
         }
     }
     
-//    var displayName: String? {
-//        get {
-//            return firstName.capitalized + " " + lastName.capitalized
-//        }
-//        set {
-//            if let array = newValue?.components(separatedBy: " ") {
-//                if array.count == 1 {
-//                    firstName = array[0]
-//                } else {
-//                    firstName = array[0]
-//                    lastName = array[1]
-//                }
-//            }
-//        }
-//    }
-    
     init() {
         
     }

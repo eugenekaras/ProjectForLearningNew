@@ -50,12 +50,12 @@ struct ContentView: View {
         .task {
             getReady()
         }
-        .onReceive(appState.userAuth.$userState) { state in
+        .onReceive(appState.userState.$state) { state in
             updateViewState(with: state)
         }
     }
     
-    func updateViewState(with signInState: UserAuth.UserState) {
+    func updateViewState(with signInState: UserState.State) {
         if (self.contentViewState == .signOut) && (signInState == .signedIn) {
             self.contentViewState = .greeting
             
@@ -79,11 +79,13 @@ struct ContentView: View {
                   case .signedIn(let userInfo):
                       let user = try User.restoreUser(userId: userInfo.userID) ?? User(userId: userInfo.userID, email: userInfo.email, displayName: userInfo.displayName, phoneNumber: userInfo.phoneNumber, url: userInfo.photoURL)
                       
-                      appState.userAuth.user = user
+                      try user.saveUserData()
                       
-                      appState.userAuth.userState = .signedIn
+                      appState.userState.user = user 
+                    
+                      appState.userState.state = .signedIn
                   case .signedOut:
-                      appState.userAuth.userState = .signedOut
+                      appState.userState.state = .signedOut
                   }
               } catch {
                   showError(error: error)
@@ -102,10 +104,10 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static var userAuth = UserAuth()
+    static var userState = UserState()
     
     static var previews: some View {
         ContentView()
-            .environmentObject(userAuth)
+            .environmentObject(userState)
     }
 }

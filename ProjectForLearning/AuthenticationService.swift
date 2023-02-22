@@ -44,7 +44,6 @@ final class AuthenticationService {
             phoneNumber: user.phoneNumber,
             photoURL: user.photoURL
         )
-        
         return .signedIn(userInfo)
     }
     
@@ -83,7 +82,6 @@ final class AuthenticationService {
             phoneNumber: user.phoneNumber,
             photoURL: user.photoURL
         )
-
         return userInfo
     }
     
@@ -100,7 +98,6 @@ final class AuthenticationService {
             phoneNumber: user.phoneNumber,
             photoURL: user.photoURL
         )
-
         return userInfo
     }
     

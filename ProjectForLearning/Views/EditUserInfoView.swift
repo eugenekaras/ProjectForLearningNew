@@ -159,7 +159,7 @@ struct EditUserInfoView: View {
         
         Task {
             do {
-                try await user.saveUserData()
+                try user.saveUserData()
             } catch {
                 await showError(error: error)
             }

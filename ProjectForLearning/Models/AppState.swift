@@ -8,5 +8,5 @@
 import Foundation
 
 class AppState : ObservableObject {
-    var userAuth = UserAuth()
+    var userState = UserState()
 }
