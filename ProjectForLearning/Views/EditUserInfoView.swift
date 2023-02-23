@@ -20,8 +20,10 @@ enum EditUserInfoError: LocalizedError {
 }
 
 struct EditUserInfoView: View {
+    @EnvironmentObject private var appState: AppState
     @Environment(\.dismiss) var dismiss
     
+    @State private var user: User = .emptyUser
     @State private var showError = false
     @State private var error: EditUserInfoError?
     @State private var image: UIImage?
@@ -30,15 +32,7 @@ struct EditUserInfoView: View {
     @State private var showCameraPicker = false
     @State private var selectPhotosPickerItem: PhotosPickerItem?
     @State private var showDialogForSaveUserInfoData = false
-    
-    @Binding private var user: User
-    @State private var tmpUser: User
-
-    init(user: Binding<User>) {
-        self._user = user
-        self._tmpUser = State(wrappedValue: user.wrappedValue)
-    }
-        
+            
     var body: some View {
         VStack{
             buttonView
@@ -50,7 +44,7 @@ struct EditUserInfoView: View {
         }
         .alert(isPresented: $showError, error: error, actions: {})
         .onAppear() {
-            tmpUser = user
+            user = appState.userState.user
         }
     }
     
@@ -80,7 +74,7 @@ struct EditUserInfoView: View {
         Section(header: Text("edit_foto")) {
             ZStack(alignment: .topTrailing){
                 HStack{
-                    UserInfoImageView(user: tmpUser)
+                    UserInfoImageView(user: user)
                 }
                 buttonChangePhotoView
             }
@@ -100,7 +94,7 @@ struct EditUserInfoView: View {
             }
             .onChange(of: image) { newValue in
                 if let image = newValue {
-                    tmpUser.image = image
+                    user.image = image
                 }
             }
             .photosPicker(isPresented: $showPhotosPicker, selection: $selectPhotosPickerItem, matching: .any(of: [.images, .screenshots]))
@@ -108,7 +102,7 @@ struct EditUserInfoView: View {
                 Task {
                     if let data = try? await newValue?.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: data) {
-                            tmpUser.image = image
+                            user.image = image
                         }
                     }
                 }
@@ -132,21 +126,21 @@ struct EditUserInfoView: View {
     private var editUserInfoView: some View {
         Group{
             Section(header: Text("first_name")) {
-                TextField("first_name",text: $tmpUser.firstName)
+                TextField("first_name",text: $user.firstName)
             }
             Section(header: Text("last_name")) {
-                TextField("last_name",text: $tmpUser.lastName)
+                TextField("last_name",text: $user.lastName)
             }
             Section(header: Text("email")) {
-                TextField("email",text: $tmpUser.email)
+                TextField("email",text: $user.email)
                     .keyboardType(.emailAddress)
             }
             Section(header: Text("phone")) {
-                TextField("phone",text: $tmpUser.phoneNumber)
+                TextField("phone",text: $user.phoneNumber)
                     .keyboardType(.phonePad)
             }
             Section(header: Text("bio")) {
-                TextEditor(text: $tmpUser.bio)
+                TextEditor(text: $user.bio)
                     .multilineTextAlignment(.leading)
                     .disableAutocorrection(true)
                     .frame(height: 200)
@@ -155,14 +149,11 @@ struct EditUserInfoView: View {
     }
     
     func saveChangeData() {
-        user = tmpUser
-        
-        Task {
-            do {
-                try user.saveUserData()
-            } catch {
-                await showError(error: error)
-            }
+        do {
+            try user.saveUserData()
+            appState.userState.user = user
+        } catch {
+            showError(error: error)
         }
     }
     
@@ -177,7 +168,10 @@ struct EditUserInfoView: View {
 }
 
 struct EditUserInfoView_Previews: PreviewProvider {
+    static var appState = AppState()
+    
     static var previews: some View {
-        EditUserInfoView(user: .constant(.emptyUser))
+        EditUserInfoView()
+            .environmentObject(appState)
     }
 }

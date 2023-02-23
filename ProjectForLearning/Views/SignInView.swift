@@ -80,7 +80,7 @@ struct SignInView: View {
         .padding()
     }
 
-    func signIn() {
+    private func signIn() {
         Task {
             do {
                 let userInfo = try await authenticationService.signIn()
@@ -92,7 +92,7 @@ struct SignInView: View {
         }
     }
     
-    func signInAnonymously() {
+    private func signInAnonymously() {
         Task {
             do {
                 let userInfo = try await authenticationService.signInAnonymously()
@@ -104,7 +104,7 @@ struct SignInView: View {
         }
     }
     
-    func setUserState(userInfo: AuthenticationService.UserInfo) throws {
+    private func setUserState(userInfo: AuthenticationService.UserInfo) throws {
         let user = try User.restoreUser(userId: userInfo.userID) ?? User(userId: userInfo.userID, email: userInfo.email, displayName: userInfo.displayName, phoneNumber: userInfo.phoneNumber, url: userInfo.photoURL)
         
         try user.saveUserData()
@@ -115,7 +115,7 @@ struct SignInView: View {
     }
     
     @MainActor
-    func showError(error: Error) {
+    private func showError(error: Error) {
         guard let error = error as NSError? else {
             fatalError("unknown_error")
         }

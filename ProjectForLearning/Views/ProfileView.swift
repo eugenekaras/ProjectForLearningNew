@@ -23,15 +23,18 @@ enum ProfileViewError: LocalizedError {
 struct ProfileView: View {
     @EnvironmentObject private var appState: AppState
     @Injected(Container.authenticationService) private var authenticationService
-    
-    @Binding var user: User
-    
+        
+    @State private var name: String = ""
+    @State private var email: String = ""
+    @State private var phoneNumber: String = ""
+    @State private var bio: String = ""
+
     @State private var showSignOutActionSheet = false
     @State private var showDialogForUserDelete = false
     @State private var showingEditUserInfoView = false
     @State private var error: ProfileViewError?
     @State private var showError = false
-    
+            
     var body: some View {
         VStack {
             userInfoView
@@ -45,26 +48,32 @@ struct ProfileView: View {
             signOutButtonView
         }
         .alert(isPresented: $showError, error: error, actions: {})
+        .onReceive(appState.userState.$user) { user in
+            self.name = user.firstName + " " + user.lastName
+            self.email = user.email
+            self.phoneNumber = user.phoneNumber
+            self.bio = user.bio
+        }
     }
     
     private var userInfoView:  some View {
         ZStack(alignment: .topTrailing) {
             HStack{
-                UserInfoImageView(user: user)
+                UserInfoImageView(user: appState.userState.user)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100, alignment: .center)
                     .cornerRadius(8)
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(user.firstName + " " + user.lastName)
+                    Text(name)
                         .font(.headline)
                     
-                    Text(user.email)
+                    Text(email)
                         .font(.subheadline)
                     
-                    Text(user.phoneNumber)
+                    Text(phoneNumber)
                         .font(.subheadline)
                     
-                    Text(user.bio)
+                    Text(bio)
                         .font(.footnote)
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
@@ -79,7 +88,7 @@ struct ProfileView: View {
         }
         .padding()
         .sheet(isPresented: $showingEditUserInfoView) {
-            EditUserInfoView(user: $user)
+            EditUserInfoView()
         }
     }
     
@@ -194,10 +203,10 @@ struct ProfileView: View {
 }
 
 struct ProfileView_Previews: PreviewProvider {
-    static var userAuth = UserState()
+    static var appState = AppState()
     
     static var previews: some View {
-        ProfileView(user: .constant(.emptyUser))
-            .environmentObject(userAuth)
+        ProfileView()
+            .environmentObject(appState)
     }
 }
