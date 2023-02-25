@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct UserInfoImageView: View {
-    var user: User
+    var userAvatar: UserAvatar
     
     var body: some View {
-        if let image = user.image {
+        switch userAvatar {
+        case .image(let image):
             Image(uiImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-        } else if let url = user.url {
+        case .url(let url):
             AsyncImage(url: url) { image in
                 image
                     .resizable()
@@ -23,7 +24,7 @@ struct UserInfoImageView: View {
             } placeholder: {
                 ProgressView()
             }
-        } else {
+        case .unknown:
             Image(systemName: "person.circle.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -33,6 +34,6 @@ struct UserInfoImageView: View {
 
 struct NetworkImage_Previews: PreviewProvider {
     static var previews: some View {
-        UserInfoImageView(user: .emptyUser)
+        UserInfoImageView(userAvatar: .unknown)
     }
 }

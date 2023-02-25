@@ -24,6 +24,7 @@ struct EditUserInfoView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var user: User = .emptyUser
+    @State private var userAvatar: UserAvatar = .unknown
     @State private var showError = false
     @State private var error: EditUserInfoError?
     @State private var image: UIImage?
@@ -34,6 +35,8 @@ struct EditUserInfoView: View {
     @State private var showDialogForSaveUserInfoData = false
             
     var body: some View {
+        let _ = Self._printChanges()
+        
         VStack{
             buttonView
             Form {
@@ -74,7 +77,7 @@ struct EditUserInfoView: View {
         Section(header: Text("edit_foto")) {
             ZStack(alignment: .topTrailing){
                 HStack{
-                    UserInfoImageView(user: user)
+                    UserInfoImageView(userAvatar: user.userAvatar)
                 }
                 buttonChangePhotoView
             }
@@ -89,12 +92,13 @@ struct EditUserInfoView: View {
                     showChangePhotoConfirmationDialog.toggle()
                 }
             }
-            .sheet(isPresented: $showCameraPicker) {
+            .fullScreenCover(isPresented: $showCameraPicker, content: {
                 ImagePicker(sourceType: .camera, image: $image, isPresented: $showCameraPicker)
-            }
+                 
+            }).ignoresSafeArea()
             .onChange(of: image) { newValue in
                 if let image = newValue {
-                    user.image = image
+                    user.userAvatar = .image(image)
                 }
             }
             .photosPicker(isPresented: $showPhotosPicker, selection: $selectPhotosPickerItem, matching: .any(of: [.images, .screenshots]))
@@ -102,7 +106,7 @@ struct EditUserInfoView: View {
                 Task {
                     if let data = try? await newValue?.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: data) {
-                            user.image = image
+                            user.userAvatar = .image(image)
                         }
                     }
                 }
@@ -111,16 +115,17 @@ struct EditUserInfoView: View {
     }
     
     private var buttonChangePhotoView: some View {
-        return Image(systemName: "camera.circle.fill")
-            .resizable()
-            .frame(width: 60, height: 60)
-            .background(Color(.white))
-            .foregroundColor(Color(.systemIndigo))
-            .clipShape(Capsule())
-            .padding()
-            .onTapGesture {
-                showChangePhotoConfirmationDialog.toggle()
-            }
+        return Button  {
+            showChangePhotoConfirmationDialog.toggle()
+        } label: {
+            Image(systemName: "camera.circle.fill")
+                .resizable()
+                .frame(width: 60, height: 60)
+                .background(Color(.white))
+                .foregroundColor(Color(.systemIndigo))
+                .clipShape(Capsule())
+                .padding()
+        }
     }
     
     private var editUserInfoView: some View {

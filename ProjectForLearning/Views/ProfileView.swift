@@ -28,7 +28,8 @@ struct ProfileView: View {
     @State private var email: String = ""
     @State private var phoneNumber: String = ""
     @State private var bio: String = ""
-
+    @State private var userAvatar: UserAvatar = .unknown
+    
     @State private var showSignOutActionSheet = false
     @State private var showDialogForUserDelete = false
     @State private var showingEditUserInfoView = false
@@ -53,13 +54,15 @@ struct ProfileView: View {
             self.email = user.email
             self.phoneNumber = user.phoneNumber
             self.bio = user.bio
+            self.userAvatar = user.userAvatar
         }
+
     }
     
     private var userInfoView:  some View {
         ZStack(alignment: .topTrailing) {
             HStack{
-                UserInfoImageView(user: appState.userState.user)
+                UserInfoImageView(userAvatar: userAvatar)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100, alignment: .center)
                     .cornerRadius(8)
@@ -93,16 +96,17 @@ struct ProfileView: View {
     }
     
     private var buttonShowEditUserInfoView: some View {
-        Image(systemName: "pencil")
-            .font(.title)
-            .padding(5)
-            .background(Color(.systemIndigo))
-            .foregroundColor(Color.white)
-            .clipShape(Capsule())
-            .padding()
-            .onTapGesture {
-                self.showingEditUserInfoView.toggle()
-            }
+        Button  {
+            self.showingEditUserInfoView.toggle()
+        } label: {
+            Image(systemName: "pencil")
+                .font(.largeTitle)
+                .padding(7)
+                .background(Color(.systemIndigo))
+                .foregroundColor(.white)
+                .clipShape(Capsule())
+                .padding()
+        }
     }
     
     private var signOutButtonView: some View {
